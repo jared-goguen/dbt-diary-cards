@@ -1,0 +1,112 @@
+# DBT Diary Card — Semantic Table Component
+# Three 1-row tables: Bookkeeping, Emotions, Urges/Skills
+
+page:
+  meta:
+    title: "Diary Card — 2026-04-17"
+    description: "Daily DBT diary entry for 2026-04-17"
+    author: "T001"
+  
+  sections:
+    # Minimal header
+    - type: hero
+      content:
+        heading: "Daily Diary Card — Thursday, April 17, 2026"
+    
+    # TABLE 1: BOOKKEEPING (Daily functioning)
+    - type: table
+      label: BOOKKEEPING
+      cells:
+        - label: Sleep
+          value: "6h"
+          type: text
+        - label: Meds
+          value: true
+          type: bool
+        - label: Self
+          value: 7
+          type: numeric
+          color-scale: [0, 10]
+        - label: Partner
+          value: 5
+          type: numeric
+          color-scale: [0, 10]
+        - label: Work
+          value: 7
+          type: numeric
+          color-scale: [0, 10]
+        - label: Social
+          value: 5
+          type: numeric
+          color-scale: [0, 10]
+    
+    # TABLE 2: EMOTIONS
+    - type: table
+      label: EMOTIONS
+      cells:
+        - label: SAD
+          value: 8
+          type: numeric
+          color-scale: [0, 10]
+        - label: ANG
+          value: 6
+          type: numeric
+          color-scale: [0, 10]
+        - label: ANX
+          value: 7
+          type: numeric
+          color-scale: [0, 10]
+        - label: SHA
+          value: 5
+          type: numeric
+          color-scale: [0, 10]
+        - label: LONE
+          value: 4
+          type: numeric
+          color-scale: [0, 10]
+        - label: HOPE
+          value: 6
+          type: numeric
+          color-scale: [0, 10]
+    
+    # TABLE 3: URGES/SKILLS
+    - type: table
+      label: URGES/SKILLS
+      cells:
+        - label: URG
+          value: 7
+          type: numeric
+          color-scale: [0, 10]
+        - label: SUB
+          value: 0
+          type: numeric
+          color-scale: [0, 10]
+        - label: MIND
+          value: true
+          type: bool
+        - label: REG
+          value: true
+          type: bool
+        - label: DIST
+          value: false
+          type: bool
+        - label: SELF
+          value: false
+          type: bool
+    
+    # Expandable: Daily Notes
+    - type: content
+      variant: prose
+      markdown: |
+        ## Daily Notes
+        
+        **Triggers:** Conflict with family about holiday plans.
+        
+        **Skills:** Mindfulness breathing (15 min), opposite action for sadness (30 min walk).
+        
+        **Therapist Focus:** Continue emotion regulation for sadness. Address family patterns.
+    
+    # Footer
+    - type: footer
+      variant: simple
+      copyright: "© 2026 DBT Support"
