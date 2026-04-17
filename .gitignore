@@ -13,6 +13,10 @@ build/
 # Gutenberg generated specs (optional, keep data only)
 specs/
 
+# Gutenberg runtime (copied from ../gutenberg/src)
+# Included for self-contained deployment
+# _gutenberg/
+
 # Environment
 .env
 .env.local

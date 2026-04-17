@@ -7,7 +7,7 @@
  * POST /diary/[date]?mode=save - Save entry
  */
 
-import { createEditHandler } from 'gutenberg/workers';
+import { createEditHandler } from '../../_gutenberg/workers/index.js';
 
 interface Env {
   DIARY_BUCKET: R2Bucket;
