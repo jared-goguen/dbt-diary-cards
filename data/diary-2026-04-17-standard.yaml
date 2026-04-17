@@ -1,0 +1,59 @@
+# Standard DBT Diary Entry - Complete daily recording (~5 minutes)
+# Most common level of detail for therapy work
+
+entry:
+  date: "2026-04-17"
+  therapist_id: "T001"
+  
+  # Target Behaviors: Primary tracking for DBT treatment
+  target_behaviors:
+    suicidal_urges: 7
+    suicidal_attempts: 0
+    self_harm_urges: 5
+    self_harm_acts: 0
+    substance_use: 0
+  
+  # Emotions: Core emotional tracking
+  emotions:
+    sadness: 8
+    anger: 6
+    anxiety: 7
+    shame: 5
+    loneliness: 4
+    hopelessness: 6
+  
+  # Skills: Which DBT modules were used
+  skills:
+    mindfulness: true
+    distress_tolerance: false
+    emotion_regulation: true
+    interpersonal_effectiveness: false
+  
+  # Functioning: Daily life engagement
+  functioning:
+    sleep_hours: 6
+    sleep_quality: 5
+    medication_compliance: true
+    work_school: 7
+    social_contact: 5
+    exercise_minutes: 30
+  
+  # Therapy: Treatment engagement
+  therapy:
+    individual_session: true
+    group_skills: false
+    coaching_calls: 0
+    homework_completion: 8
+    homework_notes: "Completed chain analysis worksheet"
+  
+  # Health: Additional health metrics
+  health:
+    eating_disorder_behaviors: 0
+    pain_level: 4
+  
+  # Notes: Qualitative context
+  notes:
+    general: "Had a difficult day but managed with skills. Urges peaked mid-afternoon."
+    triggers: "Conflict with family member about holiday plans"
+    skills_context: "Used mindfulness breathing when anxious. Practiced opposite action for sadness by going for a walk."
+    therapist_focus: "Continue work on emotion regulation for sadness. Address family conflict patterns."

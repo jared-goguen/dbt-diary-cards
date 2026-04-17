@@ -1,0 +1,135 @@
+# DBT Daily Diary Entry Template
+# Annotated template for entering new diary card data
+# All fields shown below are optional EXCEPT those marked [REQUIRED]
+#
+# Copy this template as:
+#   cp templates/diary-entry-template.yaml data/diary-YYYY-MM-DD.yaml
+#
+# Then fill in your values and save.
+
+entry:
+  # [REQUIRED] Date of this entry
+  # Format: YYYY-MM-DD (e.g., 2026-04-17)
+  date: "YYYY-MM-DD"
+  
+  # [REQUIRED] Your therapist's ID
+  # Example: "T001", "T_Smith", or "primary-therapist"
+  therapist_id: "T001"
+  
+  # [REQUIRED] Target Behaviors
+  # These are the primary behaviors DBT treatment targets
+  # Rate each on a scale of 0-10:
+  #   0 = no urge/no acts
+  #   5 = moderate urge/some acts
+  #   10 = severe urge/frequent acts
+  target_behaviors:
+    # [REQUIRED] Desire to harm yourself
+    # How strong was your urge to hurt yourself? (0-10)
+    suicidal_urges: 0
+    
+    # [OPTIONAL] Did you actually harm yourself?
+    # How many incidents or severity? (0-10)
+    suicidal_attempts: 0
+    
+    # [REQUIRED] Desire to self-injure (cutting, burning, etc.)
+    # How strong was your urge to self-injure? (0-10)
+    self_harm_urges: 0
+    
+    # [OPTIONAL] Did you actually self-injure?
+    # How many incidents or severity? (0-10)
+    self_harm_acts: 0
+    
+    # [OPTIONAL] Drug or alcohol use
+    # Did you use? How much? (0-10: 0=none, 10=heavy use)
+    substance_use: 0
+  
+  # [REQUIRED] Emotional States
+  # List the emotions you felt today with ratings
+  # You can use these common emotions or add your own:
+  #   sadness, anger, anxiety, shame, loneliness, hopelessness
+  # Rate each 0-10: 0=not at all, 5=moderate, 10=overwhelming
+  emotions:
+    sadness: 0
+    anger: 0
+    anxiety: 0
+    shame: 0
+    loneliness: 0
+    hopelessness: 0
+    # Add custom emotions as needed:
+    # frustration: 0
+    # joy: 0
+  
+  # [OPTIONAL] DBT Skills Used
+  # Did you use any skills from DBT? Mark true/false
+  # Mindfulness = observing, describing, or being fully present
+  # Distress Tolerance = TIPP, distracting, self-soothing, radical acceptance
+  # Emotion Regulation = ABC PLEASE, opposite action, problem-solving
+  # Interpersonal Effectiveness = DEAR MAN, GIVE, FAST
+  skills:
+    mindfulness: false
+    distress_tolerance: false
+    emotion_regulation: false
+    interpersonal_effectiveness: false
+  
+  # [OPTIONAL] Daily Functioning
+  # How did daily life go? Rate on 0-10 or provide numbers
+  functioning:
+    # Hours of sleep (0-24)
+    sleep_hours: 0
+    
+    # Quality of sleep (0=very poor, 10=excellent)
+    sleep_quality: 0
+    
+    # Did you take your medications? (true/false)
+    medication_compliance: true
+    
+    # Engagement at work or school (0=didn't go/not engaged, 10=fully engaged)
+    work_school: 0
+    
+    # Quality of social time (0=isolated, 10=excellent connections)
+    social_contact: 0
+    
+    # Minutes of physical activity (0-infinite)
+    exercise_minutes: 0
+  
+  # [OPTIONAL] Therapy Engagement
+  # How involved were you in your treatment?
+  therapy:
+    # Did you attend your individual therapy session?
+    individual_session: false
+    
+    # Did you attend DBT skills group/training?
+    group_skills: false
+    
+    # Did you call your therapist for crisis coaching?
+    coaching_calls: 0
+    
+    # Did you do your homework? (0=none, 10=excellent)
+    homework_completion: 0
+    
+    # What homework did you complete? (optional notes)
+    homework_notes: ""
+  
+  # [OPTIONAL] Health & Safety
+  # Any eating or physical health concerns?
+  health:
+    # Binge eating or purging incidents (0-10)
+    eating_disorder_behaviors: 0
+    
+    # Physical pain level (0=no pain, 10=severe)
+    pain_level: 0
+  
+  # [OPTIONAL] Notes & Reflections
+  # Add qualitative context about your day
+  notes:
+    # How was your day overall?
+    general: ""
+    
+    # What situations made your urges stronger?
+    triggers: ""
+    
+    # Where/when did you use skills? What worked?
+    skills_context: ""
+    
+    # What should your therapist focus on next?
+    therapist_focus: ""

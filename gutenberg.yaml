@@ -1,0 +1,6 @@
+# Gutenberg Project Configuration for DBT Diary Cards
+# All .yaml files in this directory (except gutenberg.yaml) are auto-discovered as pages
+
+project:
+  name: dbt-diary-cards
+  description: "DBT daily diary card generator with custom Gutenberg components"

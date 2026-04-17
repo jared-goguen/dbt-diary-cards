@@ -1,0 +1,214 @@
+# DBT Daily Diary Entry - Standard Complexity
+# Hand-authorable format for therapeutic context
+# All numeric ranges: 0 (none/minimal) to 10 (severe/maximum)
+
+version: "1.0"
+name: "dbt-diary-entry"
+description: "Standard DBT diary card entry structure"
+
+schema:
+  entry:
+    type: object
+    required: ["date", "therapist_id", "target_behaviors"]
+    
+    properties:
+      # Metadata (required)
+      date:
+        type: string
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        description: "Entry date in YYYY-MM-DD format"
+        example: "2026-04-17"
+      
+      therapist_id:
+        type: string
+        description: "Therapist/program identifier"
+        example: "T001"
+      
+      # Target Behaviors (required)
+      target_behaviors:
+        type: object
+        required: ["suicidal_urges", "self_harm_urges"]
+        properties:
+          suicidal_urges:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Urge to harm self (0=none, 10=severe)"
+          
+          suicidal_attempts:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Actual attempts to harm self"
+          
+          self_harm_urges:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Urge to self-injure"
+          
+          self_harm_acts:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Actual self-injury incidents"
+          
+          substance_use:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Drug/alcohol use (0=none, 10=heavy)"
+      
+      # Emotions (required: at least 1)
+      emotions:
+        type: object
+        minProperties: 1
+        additionalProperties:
+          type: number
+          minimum: 0
+          maximum: 10
+        default:
+          sadness: 5
+          anger: 5
+          anxiety: 5
+          shame: 5
+          loneliness: 5
+          hopelessness: 5
+        description: "Emotional ratings (0-10 each). Use standard emotions or add custom ones."
+      
+      # DBT Skills Used (optional)
+      skills:
+        type: object
+        properties:
+          mindfulness:
+            type: boolean
+            description: "Used observing/describing/participating"
+          distress_tolerance:
+            type: boolean
+            description: "Used TIPP/distracting/self-soothing"
+          emotion_regulation:
+            type: boolean
+            description: "Used ABC PLEASE/opposite action"
+          interpersonal_effectiveness:
+            type: boolean
+            description: "Used DEAR MAN/GIVE/FAST"
+      
+      # Daily Functioning (optional)
+      functioning:
+        type: object
+        properties:
+          sleep_hours:
+            type: number
+            minimum: 0
+            maximum: 24
+            description: "Hours slept last night"
+          
+          sleep_quality:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Sleep quality rating (0=very poor, 10=excellent)"
+          
+          medication_compliance:
+            type: boolean
+            description: "Took prescribed medications as directed"
+          
+          work_school:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Work/school engagement and productivity"
+          
+          social_contact:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Quality of social interactions"
+          
+          exercise_minutes:
+            type: number
+            minimum: 0
+            description: "Physical activity in minutes"
+      
+      # Therapy Engagement (optional)
+      therapy:
+        type: object
+        properties:
+          individual_session:
+            type: boolean
+            description: "Attended individual therapy session"
+          group_skills:
+            type: boolean
+            description: "Attended DBT skills training group"
+          coaching_calls:
+            type: number
+            minimum: 0
+            description: "Between-session coaching/crisis calls"
+          homework_completion:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Therapy homework completion (0=none, 10=excellent)"
+          homework_notes:
+            type: string
+            description: "Notes on homework completed"
+      
+      # Health & Safety (optional)
+      health:
+        type: object
+        properties:
+          eating_disorder_behaviors:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Binge eating/purging (0=none, 10=frequent)"
+          pain_level:
+            type: number
+            minimum: 0
+            maximum: 10
+            description: "Physical pain level"
+      
+      # Qualitative Notes (optional)
+      notes:
+        type: object
+        additionalProperties:
+          type: string
+        properties:
+          general:
+            type: string
+            description: "Overall reflection on the day"
+          triggers:
+            type: string
+            description: "Situations or events that activated urges"
+          skills_context:
+            type: string
+            description: "Where and how skills were used"
+          therapist_focus:
+            type: string
+            description: "Therapist recommendations or treatment focus"
+
+# Validation Rules
+validation_rules:
+  - name: "at_least_one_emotion"
+    condition: "emotions object must have at least 1 entry"
+    severity: "error"
+  
+  - name: "warn_no_skills"
+    condition: "if all skills are false/absent, show warning"
+    severity: "warning"
+    message: "No skills were used today. This may indicate difficulty accessing coping strategies."
+  
+  - name: "warn_high_suicidal_urges"
+    condition: "if suicidal_urges > 7"
+    severity: "warning"
+    message: "High suicidal urges. Please reach out to your therapist or crisis line if needed."
+  
+  - name: "warn_sleep_deprivation"
+    condition: "if sleep_hours < 5"
+    severity: "warning"
+    message: "Sleep was significantly reduced. This may impact mood and coping ability."
+  
+  - name: "warn_therapy_missed"
+    condition: "if individual_session is false and homework_completion < 5"
+    severity: "warning"
+    message: "Therapy session missed and low homework engagement. Consider scheduling make-up session."

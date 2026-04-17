@@ -1,0 +1,65 @@
+# Comprehensive DBT Diary Entry - Detailed tracking (~10 minutes)
+# Full detail with all optional fields and rich notes
+
+entry:
+  date: "2026-04-17"
+  therapist_id: "T001"
+  
+  # Target Behaviors: All fields tracked
+  target_behaviors:
+    suicidal_urges: 5
+    suicidal_attempts: 0
+    self_harm_urges: 3
+    self_harm_acts: 0
+    substance_use: 0
+  
+  # Emotions: Extended emotion palette
+  emotions:
+    sadness: 6
+    anger: 4
+    anxiety: 5
+    shame: 3
+    loneliness: 5
+    hopelessness: 4
+    frustration: 4
+    irritability: 5
+    contentment: 3
+  
+  # Skills: Comprehensive skill tracking
+  skills:
+    mindfulness: true
+    distress_tolerance: true
+    emotion_regulation: true
+    interpersonal_effectiveness: false
+  
+  # Functioning: Complete daily metrics
+  functioning:
+    sleep_hours: 7
+    sleep_quality: 6
+    medication_compliance: true
+    work_school: 8
+    social_contact: 7
+    exercise_minutes: 45
+  
+  # Therapy: Detailed engagement
+  therapy:
+    individual_session: true
+    group_skills: true
+    coaching_calls: 1
+    homework_completion: 9
+    homework_notes: "Completed emotion regulation worksheet and ABC PLEASE tracking. Made progress on identifying opposite action activities."
+  
+  # Health: Comprehensive health tracking
+  health:
+    eating_disorder_behaviors: 0
+    pain_level: 2
+  
+  # Notes: Rich qualitative context
+  notes:
+    general: "Much better day overall. Successfully applied multiple DBT skills. Attended both therapy sessions and feel more engaged in treatment. Made positive progress on interpersonal patterns."
+    
+    triggers: "Morning anxiety from work deadline. Successfully managed with mindfulness and TIPP skills. Afternoon sadness triggered by lonely feelings but practiced opposite action."
+    
+    skills_context: "Used TIPP skill when anxious (ice on wrists for 30 seconds, jogging for 10 minutes, paced breathing). Used opposite action for sadness by reaching out to friend and engaging in enjoyable activity (watched favorite show)."
+    
+    therapist_focus: "Great progress this week on emotion regulation. Recommend continuing TIPP practice for anxiety. Consider working on interpersonal effectiveness next session - noticed tendency to withdraw when anxious. Family conflict patterns improving with opposite action practice."
