@@ -1,50 +1,37 @@
 /**
  * Index Page Handler
- * 
+ *
  * Serves the diary archive page listing all entries
  */
-
-interface Env {
-  DIARY_BUCKET: R2Bucket;
-}
-
-interface RequestContext {
-  request: Request;
-  env: Env;
-}
-
-export async function onRequest(context: RequestContext) {
-  const { env } = context;
-
-  try {
-    // Try to serve pre-built index
-    const indexObj = await env.DIARY_BUCKET.get('index.html');
-
-    if (indexObj) {
-      return new Response(await indexObj.text(), {
-        headers: { 'Content-Type': 'text/html' },
-      });
+export const onRequest = async (context) => {
+    const { env } = context;
+    try {
+        // Try to serve pre-built index
+        const indexObj = await env.DIARY_BUCKET.get('index.html');
+        if (indexObj) {
+            return new Response(await indexObj.text(), {
+                headers: { 'Content-Type': 'text/html' },
+            });
+        }
+        // No index yet - show placeholder
+        return new Response(getPlaceholderHTML(), {
+            headers: { 'Content-Type': 'text/html' },
+        });
     }
-
-    // No index yet - show placeholder
-    return new Response(getPlaceholderHTML(), {
-      headers: { 'Content-Type': 'text/html' },
-    });
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    return new Response(getErrorHTML(errorMsg), {
-      status: 500,
-      headers: { 'Content-Type': 'text/html' },
-    });
-  }
-}
-
+    catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        return new Response(getErrorHTML(errorMsg), {
+            status: 500,
+            headers: { 'Content-Type': 'text/html' },
+        });
+    }
+};
 /**
  * Generate placeholder HTML for empty index
  */
-function getPlaceholderHTML(): string {
-  const today = new Date().toISOString().split('T')[0];
-  return `<!DOCTYPE html>
+function getPlaceholderHTML() {
+    const today = new Date().toISOString().split('T')[0];
+    return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -87,12 +74,11 @@ function getPlaceholderHTML(): string {
 </body>
 </html>`;
 }
-
 /**
  * Generate error HTML page
  */
-function getErrorHTML(errorMsg: string): string {
-  return `<!DOCTYPE html>
+function getErrorHTML(errorMsg) {
+    return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -121,15 +107,15 @@ function getErrorHTML(errorMsg: string): string {
 </body>
 </html>`;
 }
-
 /**
  * Escape HTML entities
  */
-function escapeHTML(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+function escapeHTML(text) {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
+//# sourceMappingURL=index.js.map

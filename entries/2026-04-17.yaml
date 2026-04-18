@@ -1,96 +1,104 @@
-# DBT Diary Card Template
-# Dynamic, editable template for daily diary entries
-
 template:
   name: diary
   route: /diary/[date]
   routeParam: date
   storage: r2
-
 page:
   meta:
-    title: "Diary Card — {{DATE}}"
-    description: "Daily DBT diary entry for {{DATE}}"
-    author: "T001"
-  
+    title: Diary Card — 2026-04-17
+    description: Daily DBT diary entry for 2026-04-17
+    author: T001
   sections:
-    # Hero section - EDITABLE (can change heading text)
     - type: hero
-      _editable: true
       content:
-        heading: "Daily Diary Card — {{DATE}}"
-    
-    # TABLE 1: BOOKKEEPING (Daily functioning) - EDITABLE
+        heading: Daily Diary Card — 2026-04-17
     - type: table
-      _editable: true
       label: BOOKKEEPING
       cells:
         - label: Sleep
-          value: ""
+          value: 7h
           type: text
         - label: Meds
           value: false
           type: bool
         - label: Self
-          value: 0
+          value: 8
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: Partner
           value: 0
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: Work
           value: 0
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: Social
           value: 0
           type: numeric
-          color-scale: [0, 10]
-    
-    # TABLE 2: EMOTIONS - EDITABLE
+          color-scale:
+            - 0
+            - 10
     - type: table
-      _editable: true
       label: EMOTIONS
       cells:
         - label: SAD
-          value: 0
+          value: 2
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: ANG
-          value: 0
+          value: 1
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: ANX
-          value: 0
+          value: 3
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: SHA
           value: 0
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: LONE
           value: 0
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: HOPE
           value: 0
           type: numeric
-          color-scale: [0, 10]
-    
-    # TABLE 3: URGES/SKILLS - EDITABLE
+          color-scale:
+            - 0
+            - 10
     - type: table
-      _editable: true
       label: URGES/SKILLS
       cells:
         - label: URG
           value: 0
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: SUB
           value: 0
           type: numeric
-          color-scale: [0, 10]
+          color-scale:
+            - 0
+            - 10
         - label: MIND
           value: false
           type: bool
@@ -103,16 +111,13 @@ page:
         - label: SELF
           value: false
           type: bool
-    
-    # Daily Notes - EDITABLE
     - type: content
-      _editable: true
       variant: prose
       markdown: |
         ## Daily Notes
-        
+
         **Triggers:** 
-        
+
         **Skills:** 
-        
+
         **Therapist Focus:**
