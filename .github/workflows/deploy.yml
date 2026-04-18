@@ -24,6 +24,9 @@ jobs:
       - name: Build TypeScript
         run: npm run build
       
+      - name: Create public directory
+        run: mkdir -p public
+      
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
