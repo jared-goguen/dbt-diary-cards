@@ -1,0 +1,19 @@
+{
+  "name": "dbt-diary-cards",
+  "version": "1.0.0",
+  "description": "DBT Diary Cards - Dynamic, editable diary entries powered by Gutenberg",
+  "main": "functions/index.ts",
+  "scripts": {
+    "dev": "wrangler pages dev ./public",
+    "build": "tsc",
+    "deploy": "wrangler pages deploy ./public"
+  },
+  "dependencies": {
+    "yaml": "^2.4.1",
+    "marked": "^11.1.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240725.0",
+    "typescript": "^5.3.3"
+  }
+}

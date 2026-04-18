@@ -2,13 +2,9 @@ name = "dbt-diary-cards"
 compatibility_date = "2024-09-23"
 
 # Pages build configuration
-pages_build_output_dir = "rendered"
+pages_build_output_dir = "public"
 
 # R2 bucket binding for diary storage
 [[r2_buckets]]
 binding = "DIARY_BUCKET"
 bucket_name = "dbt-diary-entries"
-
-# Build configuration (static site, no build step needed)
-[build]
-command = "echo 'Pages build - static'"
