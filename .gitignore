@@ -40,3 +40,6 @@ npm-debug.log*
 # Temporary
 .tmp/
 temp/
+
+# Wrangler development state
+.wrangler/

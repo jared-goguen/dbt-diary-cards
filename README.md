@@ -11,34 +11,40 @@ A digital DBT (Dialectical Behavior Therapy) daily diary card system with:
 
 ### 1. Setup
 ```bash
-# Project is ready to use - no build step required for now
-# All components are defined and examples provided
+# Install dependencies
+npm install
+
+# Gutenberg is linked as an npm package (not copied)
+# Build TypeScript sources
+npm run build
+
+# Start local dev server (requires Node.js)
+npm run dev
 ```
 
-### 2. Create Today's Entry
+### 2. Edit an Entry
 ```bash
-# Copy the template
-cp templates/diary-entry-template.yaml data/diary-2026-04-17.yaml
+# Browse to: http://localhost:8788/diary/2026-04-17?mode=edit
+# Fill in the form (sleep, emotions, urges, skills, notes)
+# Click Save to store in R2 bucket
 
-# Or use conversational mode:
-# User discusses their day with therapist/agent
-# Agent structures into: data/diary-2026-04-17.yaml
+# View the entry: http://localhost:8788/diary/2026-04-17
+# (no mode param = view mode)
 ```
 
-### 3. Generate & Publish (Future)
+### 3. Deploy to Production
 ```bash
-# Generate semantic spec
-npx ts-node scripts/generate-diary-spec.ts data/diary-2026-04-17.yaml
+# Push to main branch
+git add .
+git commit -m "Update diary entry for 2026-04-17"
+git push origin main
 
-# Build with Gutenberg (when available)
-gutenberg_build ./gutenberg.yaml
+# GitHub Actions automatically:
+# - Installs dependencies
+# - Builds TypeScript
+# - Deploys to Cloudflare Pages
 
-# Deploy to CF Pages (when available)
-gutenberg_publish ./gutenberg.yaml
-
-# Git commit for history
-git add data/diary-2026-04-17.yaml
-git commit -m "Add diary entry for 2026-04-17"
+# Live at: https://dbt-diary-cards.pages.dev/diary/2026-04-17
 ```
 
 ## Project Structure
@@ -151,6 +157,38 @@ All optional fields included with detailed context.
 3. Run generation script
 4. Deploy
 
+## Dynamic Edit Mode
+
+The application supports **two rendering modes** for diary entries:
+
+### View Mode (Default)
+```
+GET /diary/2026-04-17
+```
+- Displays a formatted, read-only view of the diary entry
+- Shows tables for bookkeeping, emotions, urges/skills
+- Shows notes section
+- Rendered from R2-stored data or template defaults
+
+### Edit Mode (Form-Based)
+```
+GET /diary/2026-04-17?mode=edit
+```
+- Interactive web form for data entry
+- Form fields auto-generated from template structure
+- **Field types supported:**
+  - Text fields (e.g., sleep duration)
+  - Numeric inputs (0-10 scales for emotions, urges)
+  - Boolean toggles (e.g., took medication, used skills)
+  - Textarea (notes and reflections)
+- Real-time form validation
+- Save button stores entry to R2 bucket
+
+### Implementation
+- Handler: `src/diary/[date].ts` → compiled to `functions/diary/[date].js`
+- Template: `templates/diary.yaml` with `_editable: true` sections
+- Library: `createEditHandler()` from `gutenberg/workers`
+
 ## Custom Gutenberg Component: diary-daily-view
 
 ### Features
@@ -174,40 +212,62 @@ All optional fields included with detailed context.
 
 **See [COMPONENTS.md](docs/COMPONENTS.md) for technical details**
 
-## Data Flow
+## Data Flow: Dynamic Edit Mode
 
 ```
-Conversational Session
+Browser Request
     ↓
-Normalized YAML (data/diary-2026-04-17.yaml)
+Cloudflare Pages Function (/functions/diary/[date].ts)
+    ├─ Read: template/diary.yaml
+    ├─ Read: R2 entry (if exists)
+    └─ Call: createEditHandler() from gutenberg/workers
     ↓
-Auto-embed Script (generate-diary-spec.ts)
+Gutenberg Pipeline (runtime)
+├─ mode=edit?  → Render form inputs
+├─ mode=save?  → Save to R2 bucket
+└─ mode=null?  → Render view mode (static)
     ↓
-Semantic Spec (specs/diary-spec-2026-04-17.yaml)
+HTML Response
+    ├─ Edit Mode: Interactive form (text, numbers, booleans)
+    ├─ View Mode: Static formatted display
+    └─ Save Mode: JSON response + redirect
     ↓
-Gutenberg Pipeline
-├─ LINT: Validate spec
-├─ SCAFFOLD: Build RenderNode tree
-├─ ENRICH: Resolve CSS classes
-└─ STYLE: Apply theme CSS
+Browser
+├─ Edit Form → Submit → Save to R2
+├─ View Page → Live display of saved data
+└─ Navigation → Links to other diary dates
+```
+
+## Deployment Flow
+
+```
+Local Development (npm run dev)
     ↓
-HTML Output (rendered/diary-2026-04-17.html)
+Git push to main branch
     ↓
-Deploy to CF Pages
+GitHub Actions workflow triggered
+├─ Install dependencies
+├─ Build TypeScript (src/ → functions/)
+├─ Run tests (bun test)
+└─ Deploy to Cloudflare Pages
     ↓
-Live: dbt-diary-cards.pages.dev/diary-2026-04-17
-    ↓
-Git Commit (data/diary-2026-04-17.yaml tracked)
+Live: https://dbt-diary-cards.pages.dev
+├─ Edit form: /diary/[date]?mode=edit
+├─ View mode: /diary/[date]
+└─ R2 storage: Persisted entries
 ```
 
 ## Technology Stack
 
-- **Data**: YAML (human-readable, version-controlled)
-- **Validation**: TypeScript (data.ts)
-- **Rendering**: Gutenberg (semantic HTML generation)
+- **Data Storage**: R2 (Cloudflare object storage) + Git (audit trail)
+- **Runtime**: Cloudflare Pages Functions (serverless)
+- **Library**: Gutenberg (semantic HTML generation, form rendering)
+  - Imported via npm link (development) or npm package (production)
+  - Provides: pipeline (lint/scaffold/enrich/style), workers (createEditHandler), types
+- **Build**: TypeScript, Bun (runtime), tsc (compiler)
 - **Styling**: CSS with theme system (ink theme)
-- **Deployment**: Cloudflare Pages (fast, static hosting)
-- **Tracking**: Git (audit trail, history)
+- **CI/CD**: GitHub Actions (build on push to main)
+- **Tracking**: Git (audit trail, entry history)
 
 ## Why This Architecture?
 
@@ -254,6 +314,46 @@ Git Commit (data/diary-2026-04-17.yaml tracked)
 - [ ] Privacy/encryption options
 - [ ] Mobile app view
 
+## Deployment Configuration
+
+### GitHub Actions Requirements
+The `.github/workflows/deploy.yml` workflow requires two secrets:
+- `CLOUDFLARE_API_TOKEN` - API token with Cloudflare Pages deploy access
+- `CLOUDFLARE_ACCOUNT_ID` - Cloudflare account ID
+
+**To set up:**
+1. Generate API token at: https://dash.cloudflare.com/profile/api-tokens
+2. Go to repo Settings → Secrets and variables → Actions
+3. Add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`
+4. Workflow triggers automatically on push to `main` branch
+
+### Cloudflare Configuration
+The project requires:
+- **R2 Bucket**: `dbt-diary-entries` (for storing diary data)
+- **Pages Project**: `dbt-diary-cards` (deployment target)
+- **Environment Variables**: Set in `wrangler.toml`
+  - `CF_PAGES="1"`
+  - `CF_PAGES_BRANCH="main"`
+  - `CLOUDFLARE_API_TOKEN` (for Gutenberg publish tool)
+  - `CLOUDFLARE_ACCOUNT_ID` (for Gutenberg publish tool)
+
+### Local Development Setup
+```bash
+# Install dependencies
+npm install
+
+# Create .env if needed (credentials are optional for local dev)
+# The app uses local R2 emulation (wrangler-provided)
+
+# Build TypeScript
+npm run build
+
+# Start dev server
+npm run dev
+
+# Access at: http://localhost:8788
+```
+
 ## Getting Started
 
 ### For Therapists/Users
@@ -267,17 +367,38 @@ Git Commit (data/diary-2026-04-17.yaml tracked)
 3. Look at example entries in `data/` to understand data format
 
 ### First Entry
+
+#### Development Workflow
 ```bash
-# Copy template
-cp templates/diary-entry-template.yaml data/diary-$(date +%Y-%m-%d).yaml
+# Build and start local dev server
+npm run build
+npm run dev
 
-# Edit with your values
-# (annotated template guides you)
+# Access the form at:
+# http://localhost:8788/diary/2026-04-17?mode=edit
 
-# When ready to deploy:
-# npx ts-node scripts/generate-diary-spec.ts data/diary-$(date +%Y-%m-%d).yaml
-# gutenberg_build ./gutenberg.yaml
-# gutenberg_publish ./gutenberg.yaml
+# Fill in the form:
+# - Sleep duration, medication status
+# - Emotions (sadness, anxiety, etc.) on 0-10 scale
+# - Urges and skills used
+# - Daily notes
+
+# Click "Save" to store in local R2 emulation
+# View the entry at: http://localhost:8788/diary/2026-04-17
+```
+
+#### Production Deployment
+```bash
+# Build and commit
+npm run build
+git add -A
+git commit -m "Add diary entry for 2026-04-17"
+git push origin main
+
+# GitHub Actions automatically deploys to:
+# https://dbt-diary-cards.pages.dev/diary/2026-04-17?mode=edit
+
+# Data is persisted in Cloudflare R2
 ```
 
 ## Support & Troubleshooting
