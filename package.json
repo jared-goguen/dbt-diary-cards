@@ -10,7 +10,7 @@
     "setup": "npm link gutenberg"
   },
   "dependencies": {
-    "gutenberg": "^1.0.0",
+    "gutenberg": "github:jared-goguen/gutenberg#main",
     "yaml": "^2.4.1",
     "marked": "^11.1.1"
   },
