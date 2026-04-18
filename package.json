@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "wrangler pages dev ./public",
     "build": "tsc",
-    "deploy": "wrangler pages deploy ./public"
+    "deploy": "wrangler pages deploy .",
+    "setup": "npm link gutenberg"
   },
   "dependencies": {
+    "gutenberg": "^1.0.0",
     "yaml": "^2.4.1",
     "marked": "^11.1.1"
   },

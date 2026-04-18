@@ -11,18 +11,18 @@ page:
   sections:
     - type: hero
       content:
-        heading: Daily Diary Card — 2026-04-17
+        heading: Daily Diary Card — {{DATE}}
     - type: table
       label: BOOKKEEPING
       cells:
         - label: Sleep
-          value: 7h
+          value: ""
           type: text
         - label: Meds
           value: false
           type: bool
         - label: Self
-          value: 8
+          value: 0
           type: numeric
           color-scale:
             - 0
@@ -49,19 +49,19 @@ page:
       label: EMOTIONS
       cells:
         - label: SAD
-          value: 2
+          value: 0
           type: numeric
           color-scale:
             - 0
             - 10
         - label: ANG
-          value: 1
+          value: 0
           type: numeric
           color-scale:
             - 0
             - 10
         - label: ANX
-          value: 3
+          value: 0
           type: numeric
           color-scale:
             - 0
