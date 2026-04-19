@@ -6,7 +6,7 @@
  * GET /diary/[date]?mode=edit - Edit form
  * POST /diary/[date]?mode=save - Save entry
  */
-import { createEditHandler } from 'gutenberg/workers';
+import { createEditHandler } from '@jared-goguen/gutenberg/workers';
 /**
  * Validate date format (YYYY-MM-DD)
  */

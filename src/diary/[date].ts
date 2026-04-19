@@ -8,7 +8,7 @@
  */
 
 import type { PagesFunction } from '@cloudflare/workers-types';
-import { createEditHandler } from 'gutenberg/workers';
+import { createEditHandler } from '@jared-goguen/gutenberg/workers';
 
 interface Env {
   DIARY_BUCKET: R2Bucket;
