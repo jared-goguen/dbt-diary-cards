@@ -47,7 +47,7 @@ try {
 
 // Step 3: Validate Gutenberg schema
 try {
-  const result = lint(templatePath);
+  const result = lint(templateContent);
   
   // lint() returns result object or throws
   if (result && result.errors && result.errors.length > 0) {
