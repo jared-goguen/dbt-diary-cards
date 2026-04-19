@@ -31,7 +31,7 @@ jobs:
         run: node .github/scripts/validate-template.mjs
       
       - name: Upload template to R2
-        run: npx wrangler r2 object put template.yaml --file=template.yaml --bucket=dbt-diary-entries
+        run: npx wrangler r2 object put dbt-diary-entries/template.yaml --file=template.yaml
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
