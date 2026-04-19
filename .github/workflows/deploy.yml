@@ -28,7 +28,7 @@ jobs:
         run: npm run build
       
       - name: Validate template
-        run: node .github/scripts/validate-template.js
+        run: node .github/scripts/validate-template.mjs
       
       - name: Upload template to R2
         run: npx wrangler r2 object put dbt-diary-entries/template.yaml --file=template.yaml

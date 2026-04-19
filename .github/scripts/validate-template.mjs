@@ -12,19 +12,10 @@
  * - 1: Validation failed
  */
 
-const fs = require('fs');
-const path = require('path');
-const YAML = require('yaml');
-
-// Import Gutenberg's lint function
-let lint;
-try {
-  lint = require('@jared-goguen/gutenberg/pipeline').lint;
-} catch (error) {
-  console.error('❌ Failed to load @jared-goguen/gutenberg/pipeline');
-  console.error('   Make sure the package is installed: npm install');
-  process.exit(1);
-}
+import fs from 'fs';
+import path from 'path';
+import YAML from 'yaml';
+import { lint } from '@jared-goguen/gutenberg/pipeline';
 
 const templatePath = path.join(process.cwd(), 'template.yaml');
 
