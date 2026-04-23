@@ -1,118 +1,92 @@
 # DBT Diary Card Template
-# Dynamic, editable template for daily diary entries
+# New PageSpec format for gutenberg edit mode.
+# Blocks with _editable: true render as form inputs in edit mode.
 
-template:
-  name: diary
-  route: /diary/[date]
-  routeParam: date
-  storage: r2
+title: "Diary Card — {{DATE}}"
+theme: mono
 
-page:
-  meta:
-    title: "Diary Card — {{DATE}}"
-    description: "Daily DBT diary entry for {{DATE}}"
-    author: "T001"
-  
-  sections:
-    # Hero section - EDITABLE (can change heading text)
-    - type: hero
+hero:
+  title: "Daily Diary Card"
+  subtitle: "{{DATE}}"
+  body: "Track emotions, urges, skills, and daily functioning."
+
+blocks:
+  # ── BOOKKEEPING ──────────────────────────────────────────
+  - section_label:
+      text: BOOKKEEPING
+
+  - table:
       _editable: true
-      content:
-        heading: "Daily Diary Card — {{DATE}}"
-    
-    # TABLE 1: BOOKKEEPING (Daily functioning) - EDITABLE
-    - type: table
+      caption: Daily functioning and self-care
+      headers:
+        - {label: Metric, size: narrow}
+        - {label: Value}
+      headerColumn: true
+      rows:
+        - [Sleep, ""]
+        - [Meds, "No"]
+        - [Self, "0"]
+        - [Partner, "0"]
+        - [Work, "0"]
+        - [Social, "0"]
+
+  # ── EMOTIONS ─────────────────────────────────────────────
+  - section_label:
+      text: EMOTIONS
+
+  - table:
       _editable: true
-      label: BOOKKEEPING
-      cells:
-        - label: Sleep
-          value: ""
-          type: text
-        - label: Meds
-          value: false
-          type: bool
-        - label: Self
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: Partner
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: Work
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: Social
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-    
-    # TABLE 2: EMOTIONS - EDITABLE
-    - type: table
+      caption: "Rate each emotion 0–10 (0 = absent, 10 = overwhelming)"
+      headers:
+        - {label: Emotion, size: narrow}
+        - {label: "Rating (0–10)"}
+      headerColumn: true
+      rows:
+        - [Sadness, "0"]
+        - [Anger, "0"]
+        - [Anxiety, "0"]
+        - [Shame, "0"]
+        - [Loneliness, "0"]
+        - [Hope, "0"]
+
+  # ── URGES / SKILLS ──────────────────────────────────────
+  - section_label:
+      text: URGES / SKILLS
+
+  - table:
       _editable: true
-      label: EMOTIONS
-      cells:
-        - label: SAD
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: ANG
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: ANX
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: SHA
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: LONE
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: HOPE
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-    
-    # TABLE 3: URGES/SKILLS - EDITABLE
-    - type: table
+      caption: "Urges 0–10, skills Yes/No"
+      headers:
+        - {label: Item, size: narrow}
+        - {label: Value}
+      headerColumn: true
+      rows:
+        - [Suicidal Urges, "0"]
+        - [Self-Harm Urges, "0"]
+        - [Substance Use, "0"]
+        - [Mindfulness, "No"]
+        - [Distress Tolerance, "No"]
+        - [Emotion Regulation, "No"]
+        - [Interpersonal Skills, "No"]
+
+  # ── DAILY NOTES ──────────────────────────────────────────
+  - section_label:
+      text: DAILY NOTES
+
+  - prose:
       _editable: true
-      label: URGES/SKILLS
-      cells:
-        - label: URG
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: SUB
-          value: 0
-          type: numeric
-          color-scale: [0, 10]
-        - label: MIND
-          value: false
-          type: bool
-        - label: REG
-          value: false
-          type: bool
-        - label: DIST
-          value: false
-          type: bool
-        - label: SELF
-          value: false
-          type: bool
-    
-    # Daily Notes - EDITABLE
-    - type: content
-      _editable: true
-      variant: prose
-      markdown: |
-        ## Daily Notes
-        
-        **Triggers:** 
-        
-        **Skills:** 
-        
+      text: |
+        **Triggers:**
+
+
+        **Skills Used:**
+
+
         **Therapist Focus:**
+
+
+  # ── CLOSING ──────────────────────────────────────────────
+  - closing:
+      text: |
+        ---
+        *Complete at end of day. All data stored securely.*
