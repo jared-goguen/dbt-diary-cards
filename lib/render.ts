@@ -6,11 +6,11 @@
  */
 
 import { parse as parseYaml } from "yaml";
-import { fromYaml } from "../../gutenberg-jg/src/specs/page/yaml.js";
-import { sanitizeSpec } from "../../gutenberg-jg/src/specs/page/sanitize.js";
-import { compile } from "../../gutenberg-jg/src/compile.js";
-import { compileEdit, findEditableBlocks } from "../../gutenberg-jg/src/pipeline/editify.js";
-import type { CompileOptions } from "../../gutenberg-jg/src/engines/html5.js";
+import { fromYaml } from "@jared-goguen/gutenberg/specs/page/yaml";
+import { sanitizeSpec } from "@jared-goguen/gutenberg/specs/page/sanitize";
+import { compile } from "@jared-goguen/gutenberg/compile";
+import { compileEdit, findEditableBlocks } from "@jared-goguen/gutenberg/pipeline/editify";
+import type { CompileOptions } from "@jared-goguen/gutenberg/engines/html5";
 import type { Storage } from "./storage.js";
 
 const TEMPLATE_KEY = "template.yaml";

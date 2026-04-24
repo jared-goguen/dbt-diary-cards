@@ -5,10 +5,10 @@
  * with filled/empty day indicators. All I/O through Storage interface.
  */
 
-import { fromYaml } from "../../gutenberg-jg/src/specs/page/yaml.js";
-import { sanitizeSpec } from "../../gutenberg-jg/src/specs/page/sanitize.js";
-import { compile } from "../../gutenberg-jg/src/compile.js";
-import type { PageSpec } from "../../gutenberg-jg/src/specs/page/types.js";
+import { fromYaml } from "@jared-goguen/gutenberg/specs/page/yaml";
+import { sanitizeSpec } from "@jared-goguen/gutenberg/specs/page/sanitize";
+import { compile } from "@jared-goguen/gutenberg/compile";
+import type { PageSpec } from "@jared-goguen/gutenberg/specs/page/types";
 import type { Storage } from "./storage.js";
 
 /** Scan storage and return all YYYY-MM-DD dates that have entries. */

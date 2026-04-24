@@ -18,13 +18,12 @@ blocks:
   - tracker:
       _editable: true
       caption: Daily functioning
-      cols: 3
+      cols: 4
       items:
         - {label: Self, value: "0", type: rating, max: 10}
         - {label: Partner, value: "0", type: rating, max: 10}
         - {label: World, value: "0", type: rating, max: 10}
         - {label: Sleep, value: "", type: text}
-        - {label: Meds, value: "No", type: toggle}
 
   # ── EMOTIONS ─────────────────────────────────────────────
   - section_label:
@@ -33,29 +32,26 @@ blocks:
   - tracker:
       _editable: true
       caption: "Rate 0–10 (0 = absent, 10 = overwhelming)"
+      cols: 4
       items:
-        - {label: Sadness, value: "0", type: rating, max: 10}
-        - {label: Anger, value: "0", type: rating, max: 10}
-        - {label: Fear, value: "0", type: rating, max: 10}
-        - {label: Shame, value: "0", type: rating, max: 10}
-        - {label: Guilt, value: "0", type: rating, max: 10}
+        - {label: Depression, value: "0", type: rating, max: 10}
+        - {label: Anxiety, value: "0", type: rating, max: 10}
+        - {label: Frustration, value: "0", type: rating, max: 10}
         - {label: Joy, value: "0", type: rating, max: 10}
 
-  # ── URGES / SKILLS ──────────────────────────────────────
+  # ── BEHAVIOR ─────────────────────────────────────────────
   - section_label:
-      text: URGES / SKILLS
+      text: BEHAVIOR
 
   - tracker:
       _editable: true
-      caption: "Urges 0–10, skills Yes/No"
+      caption: "Rate 0–10"
+      cols: 4
       items:
-        - {label: Suicidal Urges, value: "0", type: rating, max: 10}
-        - {label: Self-Harm, value: "0", type: rating, max: 10}
-        - {label: Substance Use, value: "0", type: rating, max: 10}
-        - {label: Mindfulness, value: "No", type: toggle}
-        - {label: Distress Tolerance, value: "No", type: toggle}
-        - {label: Emotion Regulation, value: "No", type: toggle}
-        - {label: Interpersonal, value: "No", type: toggle}
+        - {label: Ideation, value: "0", type: rating, max: 10}
+        - {label: Injury, value: "0", type: rating, max: 10}
+        - {label: Substance, value: "0", type: rating, max: 10}
+        - {label: Participation, value: "0", type: rating, max: 10}
 
   # ── DAILY NOTES ──────────────────────────────────────────
   - section_label:
@@ -64,7 +60,6 @@ blocks:
   - prose:
       _editable: true
       text: ""
-
 
   # ── CLOSING ──────────────────────────────────────────────
   - closing:

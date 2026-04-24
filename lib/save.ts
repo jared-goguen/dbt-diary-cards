@@ -12,8 +12,8 @@
  */
 
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
-import { findEditableBlocks } from "../../gutenberg-jg/src/pipeline/editify.js";
-import { fromYaml } from "../../gutenberg-jg/src/specs/page/yaml.js";
+import { findEditableBlocks } from "@jared-goguen/gutenberg/pipeline/editify";
+import { fromYaml } from "@jared-goguen/gutenberg/specs/page/yaml";
 import type { Storage } from "./storage.js";
 
 const TEMPLATE_KEY = "template.yaml";
