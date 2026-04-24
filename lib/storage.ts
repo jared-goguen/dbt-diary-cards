@@ -81,3 +81,47 @@ export class R2Storage implements Storage {
       .sort();
   }
 }
+
+// ── Factory ──────────────────────────────────────────────────
+
+export interface CreateStorageOptions {
+  /** R2 bucket binding — when provided, always uses R2Storage. */
+  bucket?: any;
+}
+
+/**
+ * Create a Storage instance from environment.
+ *
+ * Resolution order:
+ *   1. If options.bucket is provided → R2Storage (CF Pages runtime)
+ *   2. Else, reads env vars:
+ *        STORAGE_BACKEND  "file" (default) | "r2"
+ *        STORAGE_DIR      base directory for FileStorage (default: ".")
+ *
+ * Examples:
+ *   createStorage()                                → FileStorage(".")
+ *   STORAGE_DIR=/tmp/test createStorage()          → FileStorage("/tmp/test")
+ *   createStorage({ bucket: env.DIARY_BUCKET })    → R2Storage(bucket)
+ */
+export function createStorage(options?: CreateStorageOptions): Storage {
+  // R2 bucket binding takes priority (CF Pages runtime)
+  if (options?.bucket) {
+    return new R2Storage(options.bucket);
+  }
+
+  const backend = process.env.STORAGE_BACKEND ?? "file";
+  const baseDir = process.env.STORAGE_DIR ?? ".";
+
+  switch (backend) {
+    case "file":
+      return new FileStorage(baseDir);
+    case "r2":
+      throw new Error(
+        "STORAGE_BACKEND=r2 requires an R2 bucket binding. " +
+        "Use createStorage({ bucket }) from a CF Pages Function, " +
+        "or use wrangler pages dev for local R2 emulation.",
+      );
+    default:
+      throw new Error(`Unknown STORAGE_BACKEND: "${backend}". Expected "file" or "r2".`);
+  }
+}

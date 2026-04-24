@@ -13,18 +13,20 @@
  */
 
 import { mkdirSync } from "fs";
-import { FileStorage } from "./lib/storage.js";
+import { join } from "path";
+import { createStorage } from "./lib/storage.js";
 import { renderView, renderEdit } from "./lib/render.js";
 import { renderLanding } from "./lib/listing.js";
 import { formDataToYaml, parseFormBody } from "./lib/save.js";
 
-const PORT = 3000;
+const PORT = parseInt(process.env.PORT ?? "3000", 10);
 
-// Ensure entries directory exists
-mkdirSync("entries", { recursive: true });
+// Create storage from environment
+const storage = createStorage();
+const storageDir = process.env.STORAGE_DIR ?? ".";
 
-// Storage: filesystem rooted at cwd
-const storage = new FileStorage(".");
+// Ensure entries directory exists (FileStorage only)
+mkdirSync(join(storageDir, "entries"), { recursive: true });
 
 const DIARY_RE = /^\/diary\/(\d{4}-\d{2}-\d{2})\/?$/;
 
@@ -103,5 +105,5 @@ console.log(`
     GET  /diary/2026-04-24?mode=edit  Edit entry
     POST /diary/2026-04-24        Save entry
 
-  Storage: FileStorage (./entries/)
+  Storage: ${process.env.STORAGE_BACKEND ?? "file"} (${storageDir})
 `);

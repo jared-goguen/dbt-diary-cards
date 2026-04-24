@@ -20,11 +20,11 @@ blocks:
       caption: Daily functioning
       cols: 3
       items:
-        - {label: Sleep, value: "", type: text}
-        - {label: Meds, value: "No", type: toggle}
         - {label: Self, value: "0", type: rating, max: 10}
         - {label: Partner, value: "0", type: rating, max: 10}
         - {label: World, value: "0", type: rating, max: 10}
+        - {label: Sleep, value: "", type: text}
+        - {label: Meds, value: "No", type: toggle}
 
   # ── EMOTIONS ─────────────────────────────────────────────
   - section_label:
