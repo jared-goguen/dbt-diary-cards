@@ -43,3 +43,9 @@ temp/
 
 # Wrangler development state
 .wrangler/
+
+# Local diary entries (development data, not deployed)
+entries/
+
+# Lock files
+bun.lock
