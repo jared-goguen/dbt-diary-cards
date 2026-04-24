@@ -73,11 +73,27 @@ function navOptions(date: string): Partial<CompileOptions> {
 /** Render a diary entry in view mode. */
 export async function renderView(date: string, storage: Storage): Promise<string> {
   const yaml = await loadEntry(date, storage);
+  console.log(`[render] view ${date}: entry=${yaml ? yaml.length + "b" : "null"}`);
+
   if (!yaml) {
     return render404(date);
   }
 
+  // Defensive: check if YAML is empty or whitespace-only
+  if (!yaml.trim()) {
+    console.warn(`[render] view ${date}: entry exists but is empty, showing 404`);
+    return render404(date);
+  }
+
   const spec = fromYaml(yaml);
+  console.log(`[render] view ${date}: parsed spec — title="${spec.title ?? "?"}" blocks=${spec.blocks?.length ?? 0} hero=${!!spec.hero}`);
+
+  // Defensive: if spec has no content, show 404 instead of blank page
+  if (!spec.blocks?.length && !spec.hero) {
+    console.warn(`[render] view ${date}: spec has no blocks and no hero, showing 404`);
+    return render404(date);
+  }
+
   sanitizeSpec(spec);
   const result = compile(spec, navOptions(date));
   return result.html;
@@ -85,14 +101,28 @@ export async function renderView(date: string, storage: Storage): Promise<string
 
 /** Render a diary entry in edit mode. Falls back to template if no entry exists. */
 export async function renderEdit(date: string, storage: Storage): Promise<string> {
-  const entryYaml = await loadEntry(date, storage) ?? await loadTemplate(date, storage);
+  const entry = await loadEntry(date, storage);
+  console.log(`[render] edit ${date}: entry=${entry ? entry.length + "b" : "null"}`);
+
+  let entryYaml: string;
+  if (entry && entry.trim()) {
+    entryYaml = entry;
+    console.log(`[render] edit ${date}: using saved entry`);
+  } else {
+    entryYaml = await loadTemplate(date, storage);
+    console.log(`[render] edit ${date}: using template (${entryYaml.length}b)`);
+  }
 
   const templateRaw = await loadTemplateRaw(storage);
   const editableBlocks = findEditableBlocks(templateRaw);
+  console.log(`[render] edit ${date}: editable blocks=${[...editableBlocks].join(",")}`);
 
   const spec = fromYaml(entryYaml);
+  console.log(`[render] edit ${date}: parsed spec — title="${spec.title ?? "?"}" blocks=${spec.blocks?.length ?? 0} hero=${!!spec.hero}`);
+
   sanitizeSpec(spec);
   const result = compileEdit(spec, editableBlocks, navOptions(date));
+  console.log(`[render] edit ${date}: HTML=${result.html.length}b`);
   return result.html;
 }
 
