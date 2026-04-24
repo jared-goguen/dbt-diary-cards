@@ -1,0 +1,88 @@
+title: Diary Card — 2026-04-23
+theme: mono
+hero:
+  title: Daily Diary Card
+  subtitle: 2026-04-23
+  body: Track emotions, urges, skills, and daily functioning.
+blocks:
+  - section_label:
+      text: BOOKKEEPING
+  - table:
+      caption: Daily functioning and self-care
+      headers:
+        - label: Metric
+          size: narrow
+        - label: Value
+      headerColumn: true
+      rows:
+        - - Sleep
+          - 8h
+        - - Meds
+          - Yes
+        - - Self
+          - "7"
+        - - Partner
+          - "6"
+        - - Work
+          - "5"
+        - - Social
+          - "4"
+  - section_label:
+      text: EMOTIONS
+  - table:
+      caption: Rate each emotion 0–10 (0 = absent, 10 = overwhelming)
+      headers:
+        - label: Emotion
+          size: narrow
+        - label: Rating (0–10)
+      headerColumn: true
+      rows:
+        - - Sadness
+          - "3"
+        - - Anger
+          - "2"
+        - - Anxiety
+          - "5"
+        - - Shame
+          - "1"
+        - - Loneliness
+          - "4"
+        - - Hope
+          - "7"
+  - section_label:
+      text: URGES / SKILLS
+  - table:
+      caption: Urges 0–10, skills Yes/No
+      headers:
+        - label: Item
+          size: narrow
+        - label: Value
+      headerColumn: true
+      rows:
+        - - Suicidal Urges
+          - "2"
+        - - Self-Harm Urges
+          - "1"
+        - - Substance Use
+          - "0"
+        - - Mindfulness
+          - Yes
+        - - Distress Tolerance
+          - No
+        - - Emotion Regulation
+          - Yes
+        - - Interpersonal Skills
+          - Yes
+  - section_label:
+      text: DAILY NOTES
+  - prose:
+      text: |-
+        **Triggers:** Stressful meeting
+
+        **Skills Used:** TIPP, mindfulness
+
+        **Therapist Focus:** Work anxiety
+  - closing:
+      text: |
+        ---
+        *Complete at end of day. All data stored securely.*
