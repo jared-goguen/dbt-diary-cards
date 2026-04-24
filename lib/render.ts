@@ -54,6 +54,11 @@ function navOptions(date: string): Partial<CompileOptions> {
     nextPage: next <= today
       ? { urlPath: `/diary/${next}`, title: `${next} →` }
       : undefined,
+    breadcrumbs: [
+      { title: "Diary Cards", url: "/" },
+      { title: date },
+    ],
+    editLink: `/diary/${date}?mode=edit`,
   };
 }
 
