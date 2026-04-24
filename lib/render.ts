@@ -2,23 +2,23 @@
  * Render — shared rendering logic for diary card pages.
  *
  * Handles view mode, edit mode, prev/next navigation, and template loading.
+ * All I/O goes through the Storage interface.
  */
 
-import { readFileSync, existsSync } from "fs";
 import { parse as parseYaml } from "yaml";
 import { fromYaml } from "../../gutenberg-jg/src/specs/page/yaml.js";
 import { sanitizeSpec } from "../../gutenberg-jg/src/specs/page/sanitize.js";
 import { compile } from "../../gutenberg-jg/src/compile.js";
 import { compileEdit, findEditableBlocks } from "../../gutenberg-jg/src/pipeline/editify.js";
 import type { CompileOptions } from "../../gutenberg-jg/src/engines/html5.js";
+import type { Storage } from "./storage.js";
 
-const TEMPLATE_PATH = "template.yaml";
-const ENTRIES_DIR = "entries";
+const TEMPLATE_KEY = "template.yaml";
 
 // ── Date helpers ─────────────────────────────────────────────
 
 function addDays(dateStr: string, days: number): string {
-  const d = new Date(dateStr + "T12:00:00Z"); // noon UTC to avoid DST issues
+  const d = new Date(dateStr + "T12:00:00Z");
   d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().split("T")[0];
 }
@@ -29,17 +29,23 @@ function todayStr(): string {
 
 // ── Loading ──────────────────────────────────────────────────
 
-/** Load an entry YAML from disk. Returns null if not found. */
-export function loadEntry(date: string): string | null {
-  const path = `${ENTRIES_DIR}/${date}.yaml`;
-  if (!existsSync(path)) return null;
-  return readFileSync(path, "utf-8");
+/** Load an entry YAML from storage. Returns null if not found. */
+async function loadEntry(date: string, storage: Storage): Promise<string | null> {
+  return storage.get(`entries/${date}.yaml`);
 }
 
 /** Load the template with {{DATE}} resolved. */
-export function loadTemplate(date: string): string {
-  const raw = readFileSync(TEMPLATE_PATH, "utf-8");
+async function loadTemplate(date: string, storage: Storage): Promise<string> {
+  const raw = await storage.get(TEMPLATE_KEY);
+  if (!raw) throw new Error("Template not found: " + TEMPLATE_KEY);
   return raw.replace(/\{\{DATE\}\}/g, date);
+}
+
+/** Load the raw template for editable block discovery. */
+async function loadTemplateRaw(storage: Storage): Promise<Record<string, unknown>> {
+  const raw = await storage.get(TEMPLATE_KEY);
+  if (!raw) throw new Error("Template not found: " + TEMPLATE_KEY);
+  return parseYaml(raw) as Record<string, unknown>;
 }
 
 // ── Nav options ──────────────────────────────────────────────
@@ -65,8 +71,8 @@ function navOptions(date: string): Partial<CompileOptions> {
 // ── Render ───────────────────────────────────────────────────
 
 /** Render a diary entry in view mode. */
-export function renderView(date: string): string {
-  const yaml = loadEntry(date);
+export async function renderView(date: string, storage: Storage): Promise<string> {
+  const yaml = await loadEntry(date, storage);
   if (!yaml) {
     return render404(date);
   }
@@ -78,11 +84,10 @@ export function renderView(date: string): string {
 }
 
 /** Render a diary entry in edit mode. Falls back to template if no entry exists. */
-export function renderEdit(date: string): string {
-  const entryYaml = loadEntry(date) ?? loadTemplate(date);
+export async function renderEdit(date: string, storage: Storage): Promise<string> {
+  const entryYaml = await loadEntry(date, storage) ?? await loadTemplate(date, storage);
 
-  // Find editable blocks from the template (always)
-  const templateRaw = parseYaml(readFileSync(TEMPLATE_PATH, "utf-8")) as Record<string, unknown>;
+  const templateRaw = await loadTemplateRaw(storage);
   const editableBlocks = findEditableBlocks(templateRaw);
 
   const spec = fromYaml(entryYaml);

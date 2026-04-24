@@ -24,8 +24,7 @@ blocks:
         - {label: Meds, value: "No", type: toggle}
         - {label: Self, value: "0", type: rating, max: 10}
         - {label: Partner, value: "0", type: rating, max: 10}
-        - {label: Work, value: "0", type: rating, max: 10}
-        - {label: Social, value: "0", type: rating, max: 10}
+        - {label: World, value: "0", type: rating, max: 10}
 
   # ── EMOTIONS ─────────────────────────────────────────────
   - section_label:
@@ -37,10 +36,10 @@ blocks:
       items:
         - {label: Sadness, value: "0", type: rating, max: 10}
         - {label: Anger, value: "0", type: rating, max: 10}
-        - {label: Anxiety, value: "0", type: rating, max: 10}
+        - {label: Fear, value: "0", type: rating, max: 10}
         - {label: Shame, value: "0", type: rating, max: 10}
-        - {label: Loneliness, value: "0", type: rating, max: 10}
-        - {label: Hope, value: "0", type: rating, max: 10}
+        - {label: Guilt, value: "0", type: rating, max: 10}
+        - {label: Joy, value: "0", type: rating, max: 10}
 
   # ── URGES / SKILLS ──────────────────────────────────────
   - section_label:
@@ -64,14 +63,7 @@ blocks:
 
   - prose:
       _editable: true
-      text: |
-        **Triggers:**
-
-
-        **Skills Used:**
-
-
-        **Therapist Focus:**
+      text: ""
 
 
   # ── CLOSING ──────────────────────────────────────────────

@@ -1,28 +1,23 @@
 /**
  * Listing — build the landing page as a calendar view.
  *
- * Scans entries/ for saved diary cards and renders a monthly calendar
- * with filled/empty day indicators.
+ * Scans storage for saved diary cards and renders a monthly calendar
+ * with filled/empty day indicators. All I/O through Storage interface.
  */
 
-import { readdirSync } from "fs";
 import { fromYaml } from "../../gutenberg-jg/src/specs/page/yaml.js";
 import { sanitizeSpec } from "../../gutenberg-jg/src/specs/page/sanitize.js";
 import { compile } from "../../gutenberg-jg/src/compile.js";
 import type { PageSpec } from "../../gutenberg-jg/src/specs/page/types.js";
+import type { Storage } from "./storage.js";
 
-const ENTRIES_DIR = "entries";
-
-/** Scan entries/ and return all YYYY-MM-DD dates that have entries. */
-function scanEntryDates(): string[] {
-  try {
-    return readdirSync(ENTRIES_DIR)
-      .filter(f => f.endsWith(".yaml"))
-      .map(f => f.replace(".yaml", ""))
-      .sort();
-  } catch {
-    return [];
-  }
+/** Scan storage and return all YYYY-MM-DD dates that have entries. */
+async function scanEntryDates(storage: Storage): Promise<string[]> {
+  const keys = await storage.list("entries/");
+  return keys
+    .map(k => k.replace("entries/", "").replace(".yaml", ""))
+    .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d))
+    .sort();
 }
 
 /** Parse a YYYY-MM string into [year, month]. Defaults to current month. */
@@ -40,14 +35,14 @@ function parseMonth(monthStr?: string): [number, number] {
 /**
  * Build and render the landing page with a calendar block.
  *
+ * @param storage     Storage backend
  * @param monthQuery  Optional YYYY-MM from ?month= query param
  */
-export function renderLanding(monthQuery?: string): string {
-  const entries = scanEntryDates();
+export async function renderLanding(storage: Storage, monthQuery?: string): Promise<string> {
+  const entries = await scanEntryDates(storage);
   const today = new Date().toISOString().split("T")[0];
   const [year, month] = parseMonth(monthQuery);
 
-  // Build the PageSpec with a calendar block
   const specYaml = `
 title: DBT Diary Cards
 theme: mono

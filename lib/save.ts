@@ -2,21 +2,21 @@
  * Save — reconstruct YAML from edit-mode form data.
  *
  * The edit mode HTML renders form inputs with field names:
- *   - table cells:  section_{specIdx}__r{row}_c{col}
- *   - prose text:   section_{specIdx}__text
- *   - hero title:   section_{heroIdx}__title
- *   - hero subtitle: section_{heroIdx}__subtitle
+ *   - table cells:   section_{specIdx}__r{row}_c{col}
+ *   - prose text:    section_{specIdx}__text
+ *   - tracker items: section_{specIdx}__item_{j}
+ *   - hero title:    section_hero__title
+ *   - hero subtitle: section_hero__subtitle
  *
- * This module clones the template, replaces editable values from
- * form data, strips _editable markers, and returns valid YAML.
+ * All I/O goes through the Storage interface.
  */
 
-import { readFileSync } from "fs";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { findEditableBlocks } from "../../gutenberg-jg/src/pipeline/editify.js";
 import { fromYaml } from "../../gutenberg-jg/src/specs/page/yaml.js";
+import type { Storage } from "./storage.js";
 
-const TEMPLATE_PATH = "template.yaml";
+const TEMPLATE_KEY = "template.yaml";
 
 /**
  * Convert URL-encoded form body to a Map of field name → value.
@@ -35,13 +35,20 @@ export function parseFormBody(body: string): Map<string, string> {
 /**
  * Build a saved entry YAML from form data + template.
  *
- * @param fields  Form field map (from parseFormBody)
- * @param date    The diary date (replaces {{DATE}})
- * @returns       Valid YAML string ready to write to entries/{date}.yaml
+ * @param fields   Form field map (from parseFormBody)
+ * @param date     The diary date (replaces {{DATE}})
+ * @param storage  Storage backend for loading the template
+ * @returns        Valid YAML string ready to write to entries/{date}.yaml
  */
-export function formDataToYaml(fields: Map<string, string>, date: string): string {
+export async function formDataToYaml(
+  fields: Map<string, string>,
+  date: string,
+  storage: Storage,
+): Promise<string> {
   // Load and clone template
-  const templateYaml = readFileSync(TEMPLATE_PATH, "utf-8");
+  const templateYaml = await storage.get(TEMPLATE_KEY);
+  if (!templateYaml) throw new Error("Template not found: " + TEMPLATE_KEY);
+
   const template = parseYaml(templateYaml) as Record<string, unknown>;
   const spec = JSON.parse(JSON.stringify(template)) as Record<string, unknown>;
 
@@ -67,7 +74,7 @@ export function formDataToYaml(fields: Map<string, string>, date: string): strin
   // Find editable block indices
   const editableBlocks = findEditableBlocks(template);
   const blocks = spec.blocks as Record<string, unknown>[] | undefined;
-  if (!blocks) return stringifyYaml(spec);
+  if (!blocks) return stringifyYaml(spec, { lineWidth: 0 });
 
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];

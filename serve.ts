@@ -2,23 +2,29 @@
 /**
  * Local dev server for DBT Diary Cards.
  *
+ * Uses FileStorage backed by the current directory.
+ * Template at ./template.yaml, entries at ./entries/{date}.yaml.
+ *
  * Routes:
- *   GET  /                     → Landing page (entry listing)
+ *   GET  /                     → Landing page (calendar)
  *   GET  /diary/:date          → View entry
  *   GET  /diary/:date?mode=edit → Edit entry (or blank from template)
  *   POST /diary/:date          → Save form data → entries/{date}.yaml
  */
 
-import { mkdirSync, writeFileSync } from "fs";
+import { mkdirSync } from "fs";
+import { FileStorage } from "./lib/storage.js";
 import { renderView, renderEdit } from "./lib/render.js";
 import { renderLanding } from "./lib/listing.js";
 import { formDataToYaml, parseFormBody } from "./lib/save.js";
 
 const PORT = 3000;
-const ENTRIES_DIR = "entries";
 
 // Ensure entries directory exists
-mkdirSync(ENTRIES_DIR, { recursive: true });
+mkdirSync("entries", { recursive: true });
+
+// Storage: filesystem rooted at cwd
+const storage = new FileStorage(".");
 
 const DIARY_RE = /^\/diary\/(\d{4}-\d{2}-\d{2})\/?$/;
 
@@ -37,7 +43,7 @@ const server = Bun.serve({
       // ── Landing page ─────────────────────────────────────
       if (path === "/" || path === "") {
         const monthQuery = url.searchParams.get("month") ?? undefined;
-        const html = renderLanding(monthQuery);
+        const html = await renderLanding(storage, monthQuery);
         return new Response(html, { headers: { "Content-Type": "text/html" } });
       }
 
@@ -54,20 +60,20 @@ const server = Bun.serve({
         if (req.method === "POST") {
           const body = await req.text();
           const fields = parseFormBody(body);
-          const yaml = formDataToYaml(fields, date);
-          writeFileSync(`${ENTRIES_DIR}/${date}.yaml`, yaml);
+          const yaml = await formDataToYaml(fields, date, storage);
+          await storage.put(`entries/${date}.yaml`, yaml);
           console.log(`✓ Saved entries/${date}.yaml`);
           return Response.redirect(`/diary/${date}`, 303);
         }
 
         // GET ?mode=edit → edit mode
         if (url.searchParams.get("mode") === "edit") {
-          const html = renderEdit(date);
+          const html = await renderEdit(date, storage);
           return new Response(html, { headers: { "Content-Type": "text/html" } });
         }
 
         // GET → view mode
-        const html = renderView(date);
+        const html = await renderView(date, storage);
         return new Response(html, { headers: { "Content-Type": "text/html" } });
       }
 
@@ -92,8 +98,10 @@ console.log(`
   DBT Diary Cards — http://localhost:${PORT}
 
   Routes:
-    GET  /                        Landing page (entry listing)
-    GET  /diary/2026-04-23        View entry
-    GET  /diary/2026-04-23?mode=edit  Edit entry
-    POST /diary/2026-04-23        Save entry
+    GET  /                        Landing page (calendar)
+    GET  /diary/2026-04-24        View entry
+    GET  /diary/2026-04-24?mode=edit  Edit entry
+    POST /diary/2026-04-24        Save entry
+
+  Storage: FileStorage (./entries/)
 `);
