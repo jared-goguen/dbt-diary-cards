@@ -1,7 +1,9 @@
 name = "dbt-diary-cards"
 compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
 
-# Pages build configuration
+# Pages build configuration — static assets served from public/
+# Functions auto-discovered from functions/
 pages_build_output_dir = "public"
 
 # R2 bucket binding for diary storage

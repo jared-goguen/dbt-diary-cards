@@ -1,0 +1,4 @@
+project: dbt-diary-cards
+theme: mono
+targets:
+  - cloudflare-pages
