@@ -18,11 +18,11 @@ blocks:
         - - Sleep
           - "7"
         - - Meds
-          - Yes
+          - No
         - - Self
           - "0"
         - - Partner
-          - "0"
+          - "9"
         - - Work
           - "0"
         - - Social

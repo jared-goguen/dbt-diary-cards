@@ -106,6 +106,18 @@ export function formDataToYaml(fields: Map<string, string>, date: string): strin
         }
         break;
       }
+
+      case "tracker": {
+        const items = value.items as { value: string }[] | undefined;
+        if (!items) break;
+        for (let j = 0; j < items.length; j++) {
+          const val = fields.get(`section_${i}__item_${j}`);
+          if (val !== undefined) {
+            items[j].value = val;
+          }
+        }
+        break;
+      }
     }
   }
 

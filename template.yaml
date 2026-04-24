@@ -1,6 +1,6 @@
 # DBT Diary Card Template
-# New PageSpec format for gutenberg edit mode.
-# Blocks with _editable: true render as form inputs in edit mode.
+# Tracker blocks render as colored grids with ratings, toggles, and text.
+# Blocks with _editable: true become interactive form inputs in edit mode.
 
 title: "Diary Card — {{DATE}}"
 theme: mono
@@ -15,59 +15,48 @@ blocks:
   - section_label:
       text: BOOKKEEPING
 
-  - table:
+  - tracker:
       _editable: true
-      caption: Daily functioning and self-care
-      headers:
-        - {label: Metric, size: narrow}
-        - {label: Value}
-      headerColumn: true
-      rows:
-        - [Sleep, ""]
-        - [Meds, "No"]
-        - [Self, "0"]
-        - [Partner, "0"]
-        - [Work, "0"]
-        - [Social, "0"]
+      caption: Daily functioning
+      cols: 3
+      items:
+        - {label: Sleep, value: "", type: text}
+        - {label: Meds, value: "No", type: toggle}
+        - {label: Self, value: "0", type: rating, max: 10}
+        - {label: Partner, value: "0", type: rating, max: 10}
+        - {label: Work, value: "0", type: rating, max: 10}
+        - {label: Social, value: "0", type: rating, max: 10}
 
   # ── EMOTIONS ─────────────────────────────────────────────
   - section_label:
       text: EMOTIONS
 
-  - table:
+  - tracker:
       _editable: true
-      caption: "Rate each emotion 0–10 (0 = absent, 10 = overwhelming)"
-      headers:
-        - {label: Emotion, size: narrow}
-        - {label: "Rating (0–10)"}
-      headerColumn: true
-      rows:
-        - [Sadness, "0"]
-        - [Anger, "0"]
-        - [Anxiety, "0"]
-        - [Shame, "0"]
-        - [Loneliness, "0"]
-        - [Hope, "0"]
+      caption: "Rate 0–10 (0 = absent, 10 = overwhelming)"
+      items:
+        - {label: Sadness, value: "0", type: rating, max: 10}
+        - {label: Anger, value: "0", type: rating, max: 10}
+        - {label: Anxiety, value: "0", type: rating, max: 10}
+        - {label: Shame, value: "0", type: rating, max: 10}
+        - {label: Loneliness, value: "0", type: rating, max: 10}
+        - {label: Hope, value: "0", type: rating, max: 10}
 
   # ── URGES / SKILLS ──────────────────────────────────────
   - section_label:
       text: URGES / SKILLS
 
-  - table:
+  - tracker:
       _editable: true
       caption: "Urges 0–10, skills Yes/No"
-      headers:
-        - {label: Item, size: narrow}
-        - {label: Value}
-      headerColumn: true
-      rows:
-        - [Suicidal Urges, "0"]
-        - [Self-Harm Urges, "0"]
-        - [Substance Use, "0"]
-        - [Mindfulness, "No"]
-        - [Distress Tolerance, "No"]
-        - [Emotion Regulation, "No"]
-        - [Interpersonal Skills, "No"]
+      items:
+        - {label: Suicidal Urges, value: "0", type: rating, max: 10}
+        - {label: Self-Harm, value: "0", type: rating, max: 10}
+        - {label: Substance Use, value: "0", type: rating, max: 10}
+        - {label: Mindfulness, value: "No", type: toggle}
+        - {label: Distress Tolerance, value: "No", type: toggle}
+        - {label: Emotion Regulation, value: "No", type: toggle}
+        - {label: Interpersonal, value: "No", type: toggle}
 
   # ── DAILY NOTES ──────────────────────────────────────────
   - section_label:

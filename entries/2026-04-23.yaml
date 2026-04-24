@@ -76,12 +76,15 @@ blocks:
   - section_label:
       text: DAILY NOTES
   - prose:
-      text: |-
-        **Triggers:** Stressful meeting
+      text: "**Triggers:** Stressful meeting\r
 
-        **Skills Used:** TIPP, mindfulness
+        \r
 
-        **Therapist Focus:** Work anxiety
+        **Skills Used:** TIPP, mindfulness\r
+
+        \r
+
+        **Therapist Focus:** Work anxiety"
   - closing:
       text: |
         ---

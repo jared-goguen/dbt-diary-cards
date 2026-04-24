@@ -36,7 +36,8 @@ const server = Bun.serve({
     try {
       // ── Landing page ─────────────────────────────────────
       if (path === "/" || path === "") {
-        const html = renderLanding();
+        const monthQuery = url.searchParams.get("month") ?? undefined;
+        const html = renderLanding(monthQuery);
         return new Response(html, { headers: { "Content-Type": "text/html" } });
       }
 
