@@ -39,13 +39,23 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   const storage = createStorage({ bucket: context.env.DIARY_BUCKET });
 
   try {
-    // POST → save entry
+    // POST → save or delete entry
     if (method === "POST") {
-      console.log(`[diary] processing POST save for ${date}`);
       const body = await context.request.text();
-      console.log(`[diary] form body: ${body.length} bytes, fields: ${body.split("&").length}`);
-
       const fields = parseFormBody(body);
+
+      // DELETE via _method=delete hidden field
+      if (fields.get("_method") === "delete") {
+        console.log(`[diary] DELETE entry for ${date}`);
+        await storage.delete(`entries/${date}.yaml`);
+        console.log(`[diary] deleted entries/${date}.yaml from R2`);
+        const redirectUrl = new URL("/", context.request.url).toString();
+        return Response.redirect(redirectUrl, 303);
+      }
+
+      // SAVE
+      console.log(`[diary] processing POST save for ${date}`);
+      console.log(`[diary] form body: ${body.length} bytes, fields: ${body.split("&").length}`);
       console.log(`[diary] parsed ${fields.size} fields`);
 
       const yaml = await formDataToYaml(fields, date, storage);

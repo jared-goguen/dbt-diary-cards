@@ -14,13 +14,15 @@ export interface Storage {
   get(key: string): Promise<string | null>;
   /** Put a value by key. Creates parent directories if needed. */
   put(key: string, value: string): Promise<void>;
+  /** Delete a value by key. No-op if key doesn't exist. */
+  delete(key: string): Promise<void>;
   /** List all keys with the given prefix. Returns full keys sorted. */
   list(prefix: string): Promise<string[]>;
 }
 
 // ── FileStorage (local dev) ──────────────────────────────────
 
-import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from "fs";
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, unlinkSync } from "fs";
 import { join, dirname } from "path";
 
 export class FileStorage implements Storage {
@@ -36,6 +38,11 @@ export class FileStorage implements Storage {
     const path = join(this.baseDir, key);
     mkdirSync(dirname(path), { recursive: true });
     writeFileSync(path, value);
+  }
+
+  async delete(key: string): Promise<void> {
+    const path = join(this.baseDir, key);
+    if (existsSync(path)) unlinkSync(path);
   }
 
   async list(prefix: string): Promise<string[]> {
@@ -72,6 +79,10 @@ export class R2Storage implements Storage {
     await this.bucket.put(key, value, {
       httpMetadata: { contentType: "text/yaml" },
     });
+  }
+
+  async delete(key: string): Promise<void> {
+    await this.bucket.delete(key);
   }
 
   async list(prefix: string): Promise<string[]> {

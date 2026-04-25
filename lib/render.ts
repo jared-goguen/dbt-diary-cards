@@ -65,6 +65,7 @@ function navOptions(date: string): Partial<CompileOptions> {
       { title: date },
     ],
     editLink: `/diary/${date}?mode=edit`,
+    deleteLink: `/diary/${date}`,
   };
 }
 

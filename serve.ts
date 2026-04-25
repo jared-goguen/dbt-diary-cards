@@ -58,10 +58,19 @@ const server = Bun.serve({
           return new Response("Invalid date", { status: 400 });
         }
 
-        // POST → save
+        // POST → save or delete
         if (req.method === "POST") {
           const body = await req.text();
           const fields = parseFormBody(body);
+
+          // DELETE via _method=delete
+          if (fields.get("_method") === "delete") {
+            await storage.delete(`entries/${date}.yaml`);
+            console.log(`✗ Deleted entries/${date}.yaml`);
+            return Response.redirect("/", 303);
+          }
+
+          // SAVE
           const yaml = await formDataToYaml(fields, date, storage);
           await storage.put(`entries/${date}.yaml`, yaml);
           console.log(`✓ Saved entries/${date}.yaml`);
