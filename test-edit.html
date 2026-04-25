@@ -1989,11 +1989,11 @@ body[data-animate] .gb-visible .gb-domain-cell:nth-child(6) { animation-delay: 0
   opacity: 0.35;
 }
 
-/* Active segment: view mode (static) */
+/* Active segment: view mode (static) — uses item's accent color */
 .gb-tracker-active {
-  background: var(--scale-color);
-  box-shadow: 0 0 calc(var(--scale-intensity, 0) * 16px)
-    color-mix(in srgb, var(--scale-color) calc(var(--scale-intensity, 0) * 60%), transparent);
+  background: color-mix(in srgb, var(--tracker-accent) calc(var(--scale-intensity, 0.3) * 100%), transparent);
+  box-shadow: 0 0 calc(var(--scale-intensity, 0.3) * 16px)
+    color-mix(in srgb, var(--tracker-accent) calc(var(--scale-intensity, 0.3) * 40%), transparent);
 }
 
 /* Override neutral tick color when active */
@@ -2012,26 +2012,26 @@ body[data-animate] .gb-visible .gb-domain-cell:nth-child(6) { animation-delay: 0
   pointer-events: none;
 }
 
-/* Edit: selected segment — uses CSS :has() to derive color from polarity */
+/* Edit: selected segment — always uses item's accent color */
 .gb-tracker-scale-edit input:checked + .gb-tracker-seg {
-  background: var(--scale-color);
-  box-shadow: 0 0 calc(var(--scale-intensity, 0) * 14px)
-    color-mix(in srgb, var(--scale-color) calc(var(--scale-intensity, 0) * 50%), transparent);
+  background: color-mix(in srgb, var(--tracker-accent) calc(var(--scale-intensity, 0.3) * 100%), transparent);
+  box-shadow: 0 0 calc(var(--scale-intensity, 0.3) * 16px)
+    color-mix(in srgb, var(--tracker-accent) calc(var(--scale-intensity, 0.3) * 40%), transparent);
 }
 
-/* Live color update: CSS :has() switches --scale-color when user taps a segment */
-.gb-tracker-scale-edit:has(input[value="1"]:checked) { --scale-color: var(--scale-low); --scale-intensity: 1; }
-.gb-tracker-scale-edit:has(input[value="2"]:checked) { --scale-color: var(--scale-low); --scale-intensity: 0.5; }
-.gb-tracker-scale-edit:has(input[value="3"]:checked) { --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0; }
-.gb-tracker-scale-edit:has(input[value="4"]:checked) { --scale-color: var(--scale-high); --scale-intensity: 0.5; }
-.gb-tracker-scale-edit:has(input[value="5"]:checked) { --scale-color: var(--scale-high); --scale-intensity: 1; }
+/* Live intensity update: CSS :has() scales intensity based on deviation from neutral */
+.gb-tracker-scale-edit:has(input[value="1"]:checked) { --scale-intensity: 1; }
+.gb-tracker-scale-edit:has(input[value="2"]:checked) { --scale-intensity: 0.65; }
+.gb-tracker-scale-edit:has(input[value="3"]:checked) { --scale-intensity: 0.3; }
+.gb-tracker-scale-edit:has(input[value="4"]:checked) { --scale-intensity: 0.65; }
+.gb-tracker-scale-edit:has(input[value="5"]:checked) { --scale-intensity: 1; }
 
-/* Edit: hover feedback */
+/* Edit: hover feedback — always uses item's accent */
 .gb-tracker-scale-edit label.gb-tracker-seg {
   cursor: pointer;
 }
 .gb-tracker-scale-edit label.gb-tracker-seg:hover {
-  background: color-mix(in srgb, var(--scale-color, currentColor) 25%, transparent);
+  background: color-mix(in srgb, var(--tracker-accent) 20%, transparent);
   transform: scale(1.1);
 }
 .gb-tracker-scale-edit label.gb-tracker-seg:active {
@@ -5020,19 +5020,19 @@ body[data-edit-mode] {
 <div class="gb-block" style="margin-bottom: 2rem">
 <div class="gb-tracker" style="--tracker-cols: 4">
 <div class="gb-tracker-caption">1 = low · 3 = neutral · 5 = high</div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(226,111,77); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--tracker-accent); --scale-high: var(--tracker-accent)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(226,111,77); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_1__item_0" value="1" id="s1i0v1"><label for="s1i0v1" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_0" value="2" id="s1i0v2"><label for="s1i0v2" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_0" value="3" id="s1i0v3" checked><label for="s1i0v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_1__item_0" value="4" id="s1i0v4"><label for="s1i0v4" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_0" value="5" id="s1i0v5"><label for="s1i0v5" class="gb-tracker-seg"></label></div>
   </dd>
   <dt class="gb-tracker-label">Self</dt>
 </div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(233,85,166); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--tracker-accent); --scale-high: var(--tracker-accent)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(233,85,166); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_1__item_1" value="1" id="s1i1v1"><label for="s1i1v1" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_1" value="2" id="s1i1v2"><label for="s1i1v2" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_1" value="3" id="s1i1v3" checked><label for="s1i1v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_1__item_1" value="4" id="s1i1v4"><label for="s1i1v4" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_1" value="5" id="s1i1v5"><label for="s1i1v5" class="gb-tracker-seg"></label></div>
   </dd>
   <dt class="gb-tracker-label">Partner</dt>
 </div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(204,131,12); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--tracker-accent); --scale-high: var(--tracker-accent)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(204,131,12); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_1__item_2" value="1" id="s1i2v1"><label for="s1i2v1" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_2" value="2" id="s1i2v2"><label for="s1i2v2" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_2" value="3" id="s1i2v3" checked><label for="s1i2v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_1__item_2" value="4" id="s1i2v4"><label for="s1i2v4" class="gb-tracker-seg"></label><input type="radio" name="section_1__item_2" value="5" id="s1i2v5"><label for="s1i2v5" class="gb-tracker-seg"></label></div>
   </dd>
@@ -5054,25 +5054,25 @@ body[data-edit-mode] {
 <div class="gb-block" style="margin-bottom: 2rem">
 <div class="gb-tracker" style="--tracker-cols: 4">
 <div class="gb-tracker-caption">1 = absent · 3 = neutral · 5 = intense</div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(226,111,77); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--gb-success); --scale-high: var(--gb-danger)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(226,111,77); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_3__item_0" value="1" id="s3i0v1"><label for="s3i0v1" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_0" value="2" id="s3i0v2"><label for="s3i0v2" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_0" value="3" id="s3i0v3" checked><label for="s3i0v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_3__item_0" value="4" id="s3i0v4"><label for="s3i0v4" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_0" value="5" id="s3i0v5"><label for="s3i0v5" class="gb-tracker-seg"></label></div>
   </dd>
   <dt class="gb-tracker-label">Depression</dt>
 </div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(233,85,166); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--gb-success); --scale-high: var(--gb-danger)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(233,85,166); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_3__item_1" value="1" id="s3i1v1"><label for="s3i1v1" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_1" value="2" id="s3i1v2"><label for="s3i1v2" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_1" value="3" id="s3i1v3" checked><label for="s3i1v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_3__item_1" value="4" id="s3i1v4"><label for="s3i1v4" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_1" value="5" id="s3i1v5"><label for="s3i1v5" class="gb-tracker-seg"></label></div>
   </dd>
   <dt class="gb-tracker-label">Anxiety</dt>
 </div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(204,131,12); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--gb-success); --scale-high: var(--gb-danger)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(204,131,12); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_3__item_2" value="1" id="s3i2v1"><label for="s3i2v1" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_2" value="2" id="s3i2v2"><label for="s3i2v2" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_2" value="3" id="s3i2v3" checked><label for="s3i2v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_3__item_2" value="4" id="s3i2v4"><label for="s3i2v4" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_2" value="5" id="s3i2v5"><label for="s3i2v5" class="gb-tracker-seg"></label></div>
   </dd>
   <dt class="gb-tracker-label">Frustration</dt>
 </div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(0,173,152); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--gb-danger); --scale-high: var(--gb-success)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(0,173,152); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_3__item_3" value="1" id="s3i3v1"><label for="s3i3v1" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_3" value="2" id="s3i3v2"><label for="s3i3v2" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_3" value="3" id="s3i3v3" checked><label for="s3i3v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_3__item_3" value="4" id="s3i3v4"><label for="s3i3v4" class="gb-tracker-seg"></label><input type="radio" name="section_3__item_3" value="5" id="s3i3v5"><label for="s3i3v5" class="gb-tracker-seg"></label></div>
   </dd>
@@ -5086,25 +5086,25 @@ body[data-edit-mode] {
 <div class="gb-block" style="margin-bottom: 2rem">
 <div class="gb-tracker" style="--tracker-cols: 4">
 <div class="gb-tracker-caption">1 = none · 3 = moderate · 5 = severe</div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(226,111,77); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--gb-success); --scale-high: var(--gb-danger)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(226,111,77); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_5__item_0" value="1" id="s5i0v1"><label for="s5i0v1" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_0" value="2" id="s5i0v2"><label for="s5i0v2" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_0" value="3" id="s5i0v3" checked><label for="s5i0v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_5__item_0" value="4" id="s5i0v4"><label for="s5i0v4" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_0" value="5" id="s5i0v5"><label for="s5i0v5" class="gb-tracker-seg"></label></div>
   </dd>
   <dt class="gb-tracker-label">Ideation</dt>
 </div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(233,85,166); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--gb-success); --scale-high: var(--gb-danger)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(233,85,166); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_5__item_1" value="1" id="s5i1v1"><label for="s5i1v1" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_1" value="2" id="s5i1v2"><label for="s5i1v2" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_1" value="3" id="s5i1v3" checked><label for="s5i1v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_5__item_1" value="4" id="s5i1v4"><label for="s5i1v4" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_1" value="5" id="s5i1v5"><label for="s5i1v5" class="gb-tracker-seg"></label></div>
   </dd>
   <dt class="gb-tracker-label">Injury</dt>
 </div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(204,131,12); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--gb-success); --scale-high: var(--gb-danger)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(204,131,12); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_5__item_2" value="1" id="s5i2v1"><label for="s5i2v1" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_2" value="2" id="s5i2v2"><label for="s5i2v2" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_2" value="3" id="s5i2v3" checked><label for="s5i2v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_5__item_2" value="4" id="s5i2v4"><label for="s5i2v4" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_2" value="5" id="s5i2v5"><label for="s5i2v5" class="gb-tracker-seg"></label></div>
   </dd>
   <dt class="gb-tracker-label">Substance</dt>
 </div>
-<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(0,173,152); --scale-color: color-mix(in srgb, currentColor 25%, transparent); --scale-intensity: 0.00; --scale-low: var(--gb-danger); --scale-high: var(--gb-success)">
+<div class="gb-tracker-item gb-tracker-rating" style="--tracker-accent: rgb(0,173,152); --scale-intensity: 0.30">
   <dd class="gb-tracker-value">
     <div class="gb-tracker-scale gb-tracker-scale-edit"><input type="radio" name="section_5__item_3" value="1" id="s5i3v1"><label for="s5i3v1" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_3" value="2" id="s5i3v2"><label for="s5i3v2" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_3" value="3" id="s5i3v3" checked><label for="s5i3v3" class="gb-tracker-seg gb-tracker-neutral"></label><input type="radio" name="section_5__item_3" value="4" id="s5i3v4"><label for="s5i3v4" class="gb-tracker-seg"></label><input type="radio" name="section_5__item_3" value="5" id="s5i3v5"><label for="s5i3v5" class="gb-tracker-seg"></label></div>
   </dd>

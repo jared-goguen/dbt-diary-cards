@@ -1,7 +1,7 @@
 # DBT Diary Card Template
 # Tracker blocks render as colored grids with ratings, toggles, and text.
 # Blocks with _editable: true become interactive form inputs in edit mode.
-# Rating scale: 1-5, where 3 = neutral. Polarity drives color direction.
+# Rating scale: 1-5, where 3 = neutral. Intensity = deviation from neutral.
 
 title: "Diary Card — {{DATE}}"
 theme: mono
@@ -35,10 +35,10 @@ blocks:
       caption: "1 = absent · 3 = neutral · 5 = intense"
       cols: 4
       items:
-        - {label: Depression, value: "3", type: rating, max: 5, polarity: negative}
-        - {label: Anxiety, value: "3", type: rating, max: 5, polarity: negative}
-        - {label: Frustration, value: "3", type: rating, max: 5, polarity: negative}
-        - {label: Joy, value: "3", type: rating, max: 5, polarity: positive}
+        - {label: Depression, value: "3", type: rating, max: 5}
+        - {label: Anxiety, value: "3", type: rating, max: 5}
+        - {label: Frustration, value: "3", type: rating, max: 5}
+        - {label: Joy, value: "3", type: rating, max: 5}
 
   # ── BEHAVIOR ─────────────────────────────────────────────
   - section_label:
@@ -49,10 +49,10 @@ blocks:
       caption: "1 = none · 3 = moderate · 5 = severe"
       cols: 4
       items:
-        - {label: Ideation, value: "3", type: rating, max: 5, polarity: negative}
-        - {label: Injury, value: "3", type: rating, max: 5, polarity: negative}
-        - {label: Substance, value: "3", type: rating, max: 5, polarity: negative}
-        - {label: Participation, value: "3", type: rating, max: 5, polarity: positive}
+        - {label: Ideation, value: "3", type: rating, max: 5}
+        - {label: Injury, value: "3", type: rating, max: 5}
+        - {label: Substance, value: "3", type: rating, max: 5}
+        - {label: Participation, value: "3", type: rating, max: 5}
 
   # ── DAILY NOTES ──────────────────────────────────────────
   - section_label:
