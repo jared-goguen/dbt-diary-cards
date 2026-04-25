@@ -1,6 +1,7 @@
 # DBT Diary Card Template
 # Tracker blocks render as colored grids with ratings, toggles, and text.
 # Blocks with _editable: true become interactive form inputs in edit mode.
+# Rating scale: 1-5, where 3 = neutral. Polarity drives color direction.
 
 title: "Diary Card — {{DATE}}"
 theme: mono
@@ -17,12 +18,12 @@ blocks:
 
   - tracker:
       _editable: true
-      caption: Daily functioning
+      caption: "1 = low · 3 = neutral · 5 = high"
       cols: 4
       items:
-        - {label: Self, value: "0", type: rating, max: 10}
-        - {label: Partner, value: "0", type: rating, max: 10}
-        - {label: World, value: "0", type: rating, max: 10}
+        - {label: Self, value: "3", type: rating, max: 5}
+        - {label: Partner, value: "3", type: rating, max: 5}
+        - {label: World, value: "3", type: rating, max: 5}
         - {label: Sleep, value: "", type: text}
 
   # ── EMOTIONS ─────────────────────────────────────────────
@@ -31,13 +32,13 @@ blocks:
 
   - tracker:
       _editable: true
-      caption: "Rate 0–10 (0 = absent, 10 = overwhelming)"
+      caption: "1 = absent · 3 = neutral · 5 = intense"
       cols: 4
       items:
-        - {label: Depression, value: "0", type: rating, max: 10}
-        - {label: Anxiety, value: "0", type: rating, max: 10}
-        - {label: Frustration, value: "0", type: rating, max: 10}
-        - {label: Joy, value: "0", type: rating, max: 10}
+        - {label: Depression, value: "3", type: rating, max: 5, polarity: negative}
+        - {label: Anxiety, value: "3", type: rating, max: 5, polarity: negative}
+        - {label: Frustration, value: "3", type: rating, max: 5, polarity: negative}
+        - {label: Joy, value: "3", type: rating, max: 5, polarity: positive}
 
   # ── BEHAVIOR ─────────────────────────────────────────────
   - section_label:
@@ -45,13 +46,13 @@ blocks:
 
   - tracker:
       _editable: true
-      caption: "Rate 0–10"
+      caption: "1 = none · 3 = moderate · 5 = severe"
       cols: 4
       items:
-        - {label: Ideation, value: "0", type: rating, max: 10}
-        - {label: Injury, value: "0", type: rating, max: 10}
-        - {label: Substance, value: "0", type: rating, max: 10}
-        - {label: Participation, value: "0", type: rating, max: 10}
+        - {label: Ideation, value: "3", type: rating, max: 5, polarity: negative}
+        - {label: Injury, value: "3", type: rating, max: 5, polarity: negative}
+        - {label: Substance, value: "3", type: rating, max: 5, polarity: negative}
+        - {label: Participation, value: "3", type: rating, max: 5, polarity: positive}
 
   # ── DAILY NOTES ──────────────────────────────────────────
   - section_label:
