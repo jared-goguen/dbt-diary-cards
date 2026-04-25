@@ -1,174 +1,138 @@
-# DBT Diary Entry Schema Documentation
+# DBT Diary Card Schema
 
 ## Overview
 
-The normalized diary entry schema is a Standard complexity DBT diary card designed for hand-authoring during therapeutic sessions. All numeric scales use 0-10 ranges for consistency and simplicity.
+The diary card uses gutenberg page spec format with tracker blocks for structured ratings and prose blocks for free-text notes. All data follows the same YAML structure for both the template and saved entries.
 
-## Required Fields
+## Template Structure
 
-### `date` (string, YYYY-MM-DD format)
-The date of the diary entry.
+`template.yaml` defines the card layout. Blocks marked with `_editable: true` become interactive form inputs in edit mode.
 
-**Example:** `"2026-04-17"`
-
-### `therapist_id` (string)
-Identifier for the therapist or treatment program.
-
-**Example:** `"T001"`
-
-### `target_behaviors` (object)
-Primary behaviors targeted in DBT treatment.
-
-#### Required sub-fields:
-- **`suicidal_urges`** (0-10): Strength of desire to harm oneself
-- **`self_harm_urges`** (0-10): Strength of desire to self-injure
-
-#### Optional sub-fields:
-- **`suicidal_attempts`** (0-10): Severity/frequency of actual self-harm
-- **`self_harm_acts`** (0-10): Severity/frequency of self-injury incidents
-- **`substance_use`** (0-10): Drug/alcohol use frequency
-
-### `emotions` (object)
-Emotional states during the day. At least 1 emotion is required.
-
-**Standard emotions:**
-- `sadness` (0-10): Intensity of sad feelings
-- `anger` (0-10): Intensity of angry feelings
-- `anxiety` (0-10): Intensity of anxious feelings
-- `shame` (0-10): Intensity of shameful/embarrassed feelings
-- `loneliness` (0-10): Intensity of lonely feelings
-- `hopelessness` (0-10): Intensity of hopeless feelings
-
-**Custom emotions:** You can add any emotions with 0-10 ratings:
 ```yaml
-emotions:
-  sadness: 8
-  joy: 3
-  frustration: 6
-  irritability: 4
+title: "Diary Card — {{DATE}}"
+theme: mono
+
+hero:
+  title: "Daily Diary Card"
+  subtitle: "{{DATE}}"
+  body: "Track emotions, urges, skills, and daily functioning."
+
+blocks:
+  - section_label:
+      text: SECTION_NAME
+
+  - tracker:
+      _editable: true
+      caption: "1 = low · 3 = neutral · 5 = high"
+      cols: 4
+      items:
+        - {label: Name, value: "3", type: rating, max: 5}
+        - {label: Other, value: "", type: text}
+
+  - prose:
+      _editable: true
+      text: ""
+
+  - closing:
+      text: |
+        ---
+        *Complete at end of day. All data stored securely.*
 ```
 
-## Optional Fields
+## Current Sections
 
-### `skills` (object)
-Whether DBT skills were used today. All fields are boolean (true/false).
+### BOOKKEEPING
+| Item | Type | Description |
+|------|------|-------------|
+| Self | rating (1-5) | Self-assessment |
+| Partner | rating (1-5) | Relationship assessment |
+| World | rating (1-5) | World-view assessment |
+| Sleep | text | Free-text sleep notes |
 
-**Available modules:**
-- `mindfulness`: Observing, describing, or being fully present (true/false)
-- `distress_tolerance`: TIPP, distracting, self-soothing, radical acceptance (true/false)
-- `emotion_regulation`: ABC PLEASE, opposite action, problem-solving (true/false)
-- `interpersonal_effectiveness`: DEAR MAN, GIVE, FAST (true/false)
+### EMOTIONS
+| Item | Type | Description |
+|------|------|-------------|
+| Depression | rating (1-5) | Intensity of depressive feelings |
+| Anxiety | rating (1-5) | Intensity of anxious feelings |
+| Frustration | rating (1-5) | Intensity of frustrated feelings |
+| Joy | rating (1-5) | Intensity of joyful feelings |
 
-**Example:**
+### BEHAVIOR
+| Item | Type | Description |
+|------|------|-------------|
+| Ideation | rating (1-5) | Suicidal ideation intensity |
+| Injury | rating (1-5) | Self-harm urge intensity |
+| Substance | rating (1-5) | Substance use intensity |
+| Participation | rating (1-5) | Treatment participation level |
+
+### DAILY NOTES
+Free-text prose block for reflections, triggers, skills used, or any observations.
+
+## Tracker Item Types
+
+### rating
+Segmented 1-5 scale. 3 is neutral (default). Visual intensity is driven by deviation from the neutral center — further from center means stronger color saturation. Each item uses its own chromata accent color for all states.
+
+**Scale interpretation:**
+- **1** — Minimal / absent
+- **2** — Slight
+- **3** — Neutral (default)
+- **4** — Moderate
+- **5** — Intense / severe
+
+The scale is intentionally abstract — no numbers are displayed to the user. Intensity is communicated through color saturation only.
+
+### toggle
+On/off switch. Stored as `"on"` or `"off"`.
+
+### text
+Free-text input. Stored as a string.
+
+## _editable Marker
+
+Blocks with `_editable: true` become interactive form inputs in edit mode. The marker is preserved in saved entries so they can be re-edited. The `findEditableBlocks()` function in gutenberg's editify pipeline detects these markers.
+
+## Entry Storage
+
+Entries are stored in R2 at key `diary/YYYY-MM-DD`. The format is identical to the template, but with user-filled values and the `{{DATE}}` placeholder resolved:
+
 ```yaml
-skills:
-  mindfulness: true
-  distress_tolerance: false
-  emotion_regulation: true
-  interpersonal_effectiveness: false
+title: "Diary Card — 2026-04-17"
+theme: mono
+
+hero:
+  title: "Daily Diary Card"
+  subtitle: "2026-04-17"
+  body: "Track emotions, urges, skills, and daily functioning."
+
+blocks:
+  - section_label:
+      text: BOOKKEEPING
+  - tracker:
+      _editable: true
+      caption: "1 = low · 3 = neutral · 5 = high"
+      cols: 4
+      items:
+        - {label: Self, value: "4", type: rating, max: 5}
+        - {label: Partner, value: "2", type: rating, max: 5}
+        - {label: World, value: "3", type: rating, max: 5}
+        - {label: Sleep, value: "7 hours", type: text}
+  # ...remaining sections with filled values
 ```
 
-### `functioning` (object)
-Daily life engagement and health metrics.
+## Form Data Serialization
 
-| Field | Type | Range | Description |
-|-------|------|-------|-------------|
-| `sleep_hours` | number | 0-24 | Hours of sleep |
-| `sleep_quality` | number | 0-10 | Quality of sleep (0=poor, 10=excellent) |
-| `medication_compliance` | boolean | - | Took prescribed meds as directed |
-| `work_school` | number | 0-10 | Engagement/productivity at work or school |
-| `social_contact` | number | 0-10 | Quality of social interactions |
-| `exercise_minutes` | number | 0+ | Minutes of physical activity |
+When the edit form is submitted, `formDataToYaml()` in `lib/save.ts` converts POST form data back to YAML:
 
-### `therapy` (object)
-Engagement in treatment and homework completion.
+| Form Field Pattern | Maps To |
+|---|---|
+| `hero__title` | `hero.title` |
+| `hero__subtitle` | `hero.subtitle` |
+| `section_{i}__item_{j}` | `blocks[i].tracker.items[j].value` |
+| `section_{i}__text` | `blocks[i].prose.text` |
 
-| Field | Type | Range | Description |
-|-------|------|-------|-------------|
-| `individual_session` | boolean | - | Attended individual therapy |
-| `group_skills` | boolean | - | Attended DBT skills group |
-| `coaching_calls` | number | 0+ | Between-session crisis calls |
-| `homework_completion` | number | 0-10 | Homework completion level |
-| `homework_notes` | string | - | Description of homework done |
+The serialized YAML preserves `_editable` markers and all non-editable blocks unchanged, so entries can be re-edited.
 
-### `health` (object)
-Additional health and safety metrics.
+## {{DATE}} Placeholder
 
-| Field | Type | Range | Description |
-|-------|------|-------|-------------|
-| `eating_disorder_behaviors` | number | 0-10 | Binge/purge frequency or severity |
-| `pain_level` | number | 0-10 | Physical pain level |
-
-### `notes` (object)
-Qualitative reflections on the day. All fields are optional strings.
-
-| Field | Description |
-|-------|-------------|
-| `general` | Overall reflection on the day |
-| `triggers` | Situations that activated urges |
-| `skills_context` | Where/when skills were used and effectiveness |
-| `therapist_focus` | Recommendations for next session focus |
-
-## Validation Rules
-
-The schema enforces these validation rules:
-
-| Rule | Severity | Message |
-|------|----------|---------|
-| At least 1 emotion | error | "At least one emotion is required" |
-| All 0-10 scales | error | "Value must be 0-10" |
-| Sleep hours 0-24 | error | "Sleep hours must be 0-24" |
-| No skills used | warning | "No skills were used today. This may indicate difficulty accessing coping strategies." |
-| High suicidal urges (>7) | warning | "High suicidal urges. Please reach out to your therapist or crisis line if needed." |
-| Sleep deprivation (<5 hours) | warning | "Sleep was significantly reduced. This may impact mood and coping ability." |
-| Therapy missed + low homework | warning | "Therapy session missed and low homework engagement. Consider scheduling make-up session." |
-
-## Examples
-
-### Minimal Entry (Good Day)
-```yaml
-entry:
-  date: "2026-04-17"
-  therapist_id: "T001"
-  target_behaviors:
-    suicidal_urges: 2
-    self_harm_urges: 1
-  emotions:
-    sadness: 3
-    anxiety: 2
-  notes:
-    general: "Good day. Urges manageable."
-```
-
-### Standard Entry (Typical Day)
-See `data/diary-2026-04-17-standard.yaml` for a complete example.
-
-### Comprehensive Entry (Detailed)
-See `data/diary-2026-04-17-comprehensive.yaml` for a full example with all optional fields.
-
-## Scale Interpretation Guide
-
-### Urges/Intensity Scales (0-10)
-- **0-2:** Minimal or no presence
-- **3-4:** Slight presence but manageable
-- **5-6:** Moderate intensity, requires attention
-- **7-8:** Strong intensity, concerning
-- **9-10:** Overwhelming, immediate intervention needed
-
-### Quality/Engagement Scales (0-10)
-- **0-2:** Very poor or no engagement
-- **3-4:** Minimal engagement
-- **5-6:** Moderate engagement
-- **7-8:** Good engagement
-- **9-10:** Excellent engagement
-
-## Data Storage & Retrieval
-
-All entries are stored in `data/` directory with filenames: `diary-YYYY-MM-DD.yaml`
-
-**Examples:**
-- `data/diary-2026-04-17.yaml`
-- `data/diary-2026-04-18.yaml`
-- `data/diary-2026-04-19.yaml`
-
-Entries are git-tracked for historical audit trail and version control.
+The template uses `{{DATE}}` in the title and hero subtitle. When creating a new entry from the template, the handler substitutes the actual date in `YYYY-MM-DD` format. Saved entries store the resolved date.
