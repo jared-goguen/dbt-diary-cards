@@ -18,13 +18,13 @@ blocks:
 
   - tracker:
       _editable: true
-      caption: "1 = low · 3 = neutral · 5 = high"
+      caption: "1 = poor · 3 = neutral · 5 = excellent"
       cols: 4
       items:
-        - {label: Self, value: "3", type: rating, max: 5}
+        - {label: Diet, value: "3", type: rating, max: 5}
+        - {label: Exercise, value: "3", type: rating, max: 5}
         - {label: Partner, value: "3", type: rating, max: 5}
         - {label: World, value: "3", type: rating, max: 5}
-        - {label: Sleep, value: "", type: text}
 
   # ── EMOTIONS ─────────────────────────────────────────────
   - section_label:

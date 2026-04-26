@@ -44,10 +44,10 @@ blocks:
 ### BOOKKEEPING
 | Item | Type | Description |
 |------|------|-------------|
-| Self | rating (1-5) | Self-assessment |
-| Partner | rating (1-5) | Relationship assessment |
-| World | rating (1-5) | World-view assessment |
-| Sleep | text | Free-text sleep notes |
+| Diet | rating (1-5) | Nutrition quality |
+| Exercise | rating (1-5) | Physical activity level |
+| Partner | rating (1-5) | Relationship quality |
+| World | rating (1-5) | World-view / outlook |
 
 ### EMOTIONS
 | Item | Type | Description |
